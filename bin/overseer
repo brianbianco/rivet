@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require 'overseer'
+require 'overseer/client'
+
+DEBUG = Logger::DEBUG
+WARN = Logger::WARN
+FATAL = Logger::FATAL
+INFO  = Logger::INFO
+
+options = { :log_level => Logger::INFO}
+
+OptionParser.new do |o|
+  o.on('-g', '--group [GROUP_NAME]', String, 'Autoscaling group name') do |g|
+    options[:group] = g
+  end
+
+  o.on('-l' '--log-level [LEVEL]', String, "specify the log level (default is INFO)") do |l|
+    options[:log_level] = Kernel.const_get l.upcase
+  end
+
+  o.on('-h') { puts o; exit }
+  o.parse!
+end
+
+raise "--group [GROUP_NAME] argument is required!" if options[:group].nil?
+
+Overseer::Client.new.run(options)
+
