@@ -18,7 +18,7 @@ module Overseer
 
       # The launch_configuration attr exists for convinence since that is what
       # the aws SDK refers to the launch configuration name as for autoscaling
-     @launch_configuration = @launch_config.identity
+      @launch_configuration = @launch_config.identity
     end
 
     def options
@@ -34,6 +34,7 @@ module Overseer
     end
 
     def show_differences(level = 'info')
+      Overseer::Log.write(level, "Remote and local defintions match")
       differences.each_pair do |attr,values|
         Overseer::Log.write(level,"#{attr}:")
         Overseer::Log.write(level,"  remote: #{values['remote']}")
