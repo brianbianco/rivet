@@ -9,7 +9,11 @@ WARN  = Logger::WARN
 FATAL = Logger::FATAL
 INFO  = Logger::INFO
 
-options = { :log_level => Logger::INFO}
+# Default option values
+options = {
+  :log_level => INFO,
+  :profile => 'default'
+}
 
 OptionParser.new do |o|
   o.on('-g', '--group [GROUP_NAME]', String, 'Autoscaling group name') do |g|
@@ -18,6 +22,11 @@ OptionParser.new do |o|
 
   o.on('-l', '--log-level [LEVEL]', String, "specify the log level (default is INFO)") do |l|
     options[:log_level] = Kernel.const_get l.upcase
+  end
+
+
+  o.on('-p', '--profile [PROFILE_NAME]', "Selects the AWS profile to use (default is 'default')") do |p|
+    options[:profile] = p
   end
 
   o.on('-s', '--sync', "Sync the changes remotely to AWS") do |s|

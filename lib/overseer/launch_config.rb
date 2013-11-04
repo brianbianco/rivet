@@ -1,6 +1,5 @@
 module Overseer
   class LaunchConfig
-    include Overseer::AwsUtils
 
     LC_ATTRIBUTES = ['key_name','image_id','instance_type','security_groups','bootstrap']
 
@@ -28,7 +27,7 @@ module Overseer
     end
 
     def save
-      verify_security_groups(security_groups)
+      AwsUtils.verify_security_groups(security_groups)
 
       lc_collection = AWS::AutoScaling.new().launch_configurations
 
