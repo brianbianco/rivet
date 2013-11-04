@@ -7,6 +7,7 @@ require 'optparse'
 require 'singleton'
 require 'yaml'
 
+require_relative 'overseer/deep_merge'
 require_relative 'overseer/logger'
 require_relative 'overseer/utils'
 require_relative 'overseer/aws_utils'

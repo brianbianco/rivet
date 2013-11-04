@@ -1,4 +1,5 @@
 module Overseer
+  module Utils
     AUTOSCALE_DIR = "autoscale"
 
     def self.ensure_minimum_setup
@@ -56,5 +57,7 @@ module Overseer
         false
       end
     end
+
+  end
 end
 
