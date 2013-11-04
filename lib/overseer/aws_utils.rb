@@ -1,8 +1,5 @@
 module Overseer
   module AwsUtils
-    # A whole bunch of annoying code to get AWS credentials goes here.
-
-    # Faking it for now
 
     def self.verify_security_groups(groups)
       Overseer::Log.info("Verifying security groups: #{groups.join(",")}")
