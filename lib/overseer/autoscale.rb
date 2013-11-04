@@ -34,7 +34,9 @@ module Overseer
     end
 
     def show_differences(level = 'info')
-      Overseer::Log.write(level, "Remote and local defintions match")
+
+      Overseer::Log.write(level, "Remote and local defintions match") unless differences?
+
       differences.each_pair do |attr,values|
         Overseer::Log.write(level,"#{attr}:")
         Overseer::Log.write(level,"  remote: #{values['remote']}")
