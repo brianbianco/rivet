@@ -2,12 +2,10 @@ require 'rspec'
 require 'tempfile'
 require 'pathname'
 require 'fileutils'
-require_relative '../lib/overseer/utils.rb'
-
-include Overseer
+require_relative '../lib/overseer.rb'
 
 definition_name = "unit_test"
-definition_dir  = File.join(Overseer::AUTOSCALE_DIR,definition_name)
+definition_dir  = File.join(Overseer::Utils::AUTOSCALE_DIR,definition_name)
 launch_config_params = ['ssh_key','instance_size','security_groups','ami','bootstrap']
 
 defaults_hash = {
@@ -53,32 +51,32 @@ describe "overseer utils" do
   tempdir_context "without an autoscaling directory" do
     describe "ensure_minimum_setup" do
       it "creates the autoscale directory if it doesn't exist" do
-        ensure_minimum_setup
-        Dir.exists?(Overseer::AUTOSCALE_DIR).should be_true
+        Overseer::Utils.ensure_minimum_setup
+        Dir.exists?(Overseer::Utils::AUTOSCALE_DIR).should be_true
       end
     end
   end
 
   tempdir_context "with an autoscaling directory" do
     before do
-      FileUtils.mkdir_p(Overseer::AUTOSCALE_DIR)
+      FileUtils.mkdir_p(Overseer::Utils::AUTOSCALE_DIR)
     end
 
     describe "ensure_minimum_setup" do
       it "should return true" do
-        ensure_minimum_setup.should be_true
+        Overseer::Utils.ensure_minimum_setup.should be_true
       end
     end
 
     describe "consume_defaults" do
       it "should return false" do
-        consume_defaults.should be_false
+        Overseer::Utils.consume_defaults.should be_false
       end
     end
 
     describe "load_definition" do
       it "should return false" do
-        load_definition("unit_test").should be_false
+        Overseer::Utils.load_definition("unit_test").should be_false
       end
     end
 
@@ -89,7 +87,7 @@ describe "overseer utils" do
 
       describe "load_definition" do
         it "should return false" do
-          load_definition("unit_test").should be_false
+          Overseer::Utils.load_definition("unit_test").should be_false
         end
       end
 
@@ -102,27 +100,27 @@ describe "overseer utils" do
         end
         describe "load_definition" do
           it "returns a hash" do
-            loaded_def = load_definition("unit_test")
+            loaded_def = Overseer::Utils.load_definition("unit_test")
             unit_test_definition_hash.each_pair { |k,v| loaded_def.should include(k => v) }
           end
         end
         context "and with a defaults.yml" do
           before do
-            File.open(File.join(Overseer::AUTOSCALE_DIR,"defaults.yml"),'w') do |f|
+            File.open(File.join(Overseer::Utils::AUTOSCALE_DIR,"defaults.yml"),'w') do |f|
               f.write(defaults_hash.to_yaml)
             end
           end
 
           describe "consume_defaults" do
             it "consume defaults returns a hash" do
-              results = consume_defaults
+              results = Overseer::Utils.consume_defaults
               defaults_hash.each_pair { |k,v| results.should include(k => v) }
             end
           end
 
          describe "get_definition" do
            it "returns a merged hash" do
-            result = get_definition(definition_name)
+            result = Overseer::Utils.get_definition(definition_name)
             merged_hash = defaults_hash.merge(unit_test_definition_hash)
             result.should == defaults_hash.merge(unit_test_definition_hash)
            end
