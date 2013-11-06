@@ -1,8 +1,6 @@
-require 'rspec'
-require 'tempfile'
-require 'pathname'
-require 'fileutils'
-require_relative '../lib/overseer.rb'
+require_relative './overseer_spec_setup'
+
+include SpecHelpers
 
 definition_name = "unit_test"
 definition_dir  = File.join(Overseer::Utils::AUTOSCALE_DIR,definition_name)
@@ -29,23 +27,6 @@ unit_test_definition_hash = {
     'run_list' => ['role[merging_test']
   }
 }
-
-def tempdir_context(name, &block)
-  context name do
-    before do
-      @origin_dir = Dir.pwd
-      @temp_dir = ::Pathname.new(::File.expand_path(::Dir.mktmpdir))
-      Dir.chdir @temp_dir
-    end
-
-    after do
-      Dir.chdir @origin_dir
-      FileUtils.remove_entry(@temp_dir)
-    end
-
-    instance_eval &block
-  end
-end
 
 describe "overseer utils" do
   tempdir_context "without an autoscaling directory" do
@@ -77,6 +58,12 @@ describe "overseer utils" do
     describe "load_definition" do
       it "should return false" do
         Overseer::Utils.load_definition("unit_test").should be_false
+      end
+    end
+
+    describe "get_definition" do
+      it "should return false" do
+        Overseer::Utils.get_definition("unit_test")
       end
     end
 
