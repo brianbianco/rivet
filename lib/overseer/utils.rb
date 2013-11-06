@@ -2,6 +2,11 @@ module Overseer
   module Utils
     AUTOSCALE_DIR = "autoscale"
 
+    def self.die(level = 'fatal',message)
+      Overseer::Log.write(level,message)
+      exit
+    end
+
     def self.ensure_minimum_setup
       if Dir.exists?(AUTOSCALE_DIR)
         true
@@ -17,9 +22,9 @@ module Overseer
       defaults = consume_defaults
       group_def = load_definition(group)
       if defaults && group_def
-        group_def = defaults.merge(group_def)
+        group_def = defaults.deep_merge(group_def)
       end
-    group_def ? group_def : defaults
+    group_def ? group_def : false
     end
 
     # Gobbles up the defaults file from YML, returns the hash or false if empty
@@ -52,7 +57,7 @@ module Overseer
         rescue
           Overseer::Log.fatal("Could not parse YAML from #{conf_file}: #{e.message}")
         end
-        parsed
+        parsed ? parsed : { }
       else
         false
       end
