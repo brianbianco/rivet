@@ -49,6 +49,9 @@ module Overseer
         Overseer::Log.info("Syncing autoscale group changes to AWS for #{@name}")
         autoscale = AWS::AutoScaling.new()
         group = autoscale.groups[@name]
+
+        create(options) unless group.exists?
+
         @launch_config.save
         group.update(options)
       else
@@ -91,17 +94,31 @@ module Overseer
     def get_remote
       autoscale = AWS::AutoScaling.new()
       remote_group = autoscale.groups[@name]
-      remote_hash = [:min_size,:max_size].inject(Hash.new) do |accum,attr|
-        accum[attr.to_s] = remote_group.send(attr)
-        accum
+      if remote_group.exists?
+
+        remote_hash = [:min_size,:max_size].inject(Hash.new) do |accum,attr|
+          accum[attr.to_s] = remote_group.send(attr)
+          accum
+        end
+
+        remote_hash['launch_configuration'] = remote_group.launch_configuration_name
+
+        # Normalize their AWS::Core::Data::List to a sorted array
+        remote_hash['availability_zones'] = remote_group.availability_zone_names.to_a.sort
+
+        remote_hash
+      else
+        { }
       end
+    end
 
-      remote_hash['launch_configuration'] = remote_group.launch_configuration_name
-
-      # Normalize their AWS::Core::Data::List to a sorted array
-      remote_hash['availability_zones'] = remote_group.availability_zone_names.to_a.sort
-
-      remote_hash
+    def create(options)
+      autoscale = AWS::AutoScaling.new()
+      if autoscale.groups[@name].exists?
+        raise "Cannot create AutoScaling #{@name} group it already exists!"
+      else
+        autoscale.groups.create(@name,options)
+      end
     end
 
   end
