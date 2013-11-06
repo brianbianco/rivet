@@ -48,7 +48,7 @@ module Overseer
         if gem.size > 1
           install_gems << "gem install #{gem[0]} -v #{gem[1]} --no-rdoc --no-ri\n"
         else
-          install_gems << "gem install #{} --no-rdoc --no-ri\n"
+          install_gems << "gem install #{gem[0]} --no-rdoc --no-ri\n"
         end
       end unless gems.nil?
 
