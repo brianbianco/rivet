@@ -10,7 +10,7 @@ module Overseer
         filtered_groups << g.name
       end
 
-      security_groups.each do |g|
+      groups.each do |g|
         unless filtered_groups.include?(g)
           Overseer::Log.debug("Creating security group #{g}")
           security_groups_collection.create g
