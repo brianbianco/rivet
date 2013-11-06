@@ -58,7 +58,7 @@ module Overseer
     end
 
     def normalize_security_groups(groups)
-      groups.sort!
+      groups.sort
     end
 
   end
