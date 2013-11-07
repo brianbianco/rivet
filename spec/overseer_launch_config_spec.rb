@@ -2,7 +2,6 @@ require_relative './overseer_spec_setup'
 
 include SpecHelpers
 
-autoscale_definition_identity = "ad82d3eaf94d9bbee6bc73f52ab3f4a1942d1fd3"
 
 describe "overseer launch config" do
   let (:launch_config) { Overseer::LaunchConfig.new(SpecHelpers::AUTOSCALE_DEF) }
@@ -16,7 +15,7 @@ describe "overseer launch config" do
 
     describe "#identity" do
       it "should return a deterministic identity" do
-        launch_config.identity.should == autoscale_definition_identity
+        launch_config.identity.should == SpecHelpers::AUTOSCALE_DEF_IDENTITY 
      end
     end
 

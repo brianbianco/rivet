@@ -9,6 +9,15 @@ Overseer::Log.level(Logger::FATAL)
 
 module SpecHelpers
 
+
+   BOOTSTRAP_TEMPLATE = '<%= install_gems %>'\
+                        '<%= config_content %>'\
+                        '<%= first_boot %>'\
+                        "\n"\
+                        '<%= chef_command %>'
+
+  AUTOSCALE_DEF_IDENTITY = "overseer_ad82d3eaf94d9bbee6bc73f52ab3f4a1942d1fd3"
+
   AUTOSCALE_DEF = {
     'min_size' => 1,
     'max_size' => 3,

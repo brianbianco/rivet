@@ -9,11 +9,6 @@ describe 'overseer bootstrap' do
   tempdir_context 'with all necessary files in place' do
     before do
 
-      template = '<%= install_gems %>'\
-                 '<%= config_content %>'\
-                 '<%= first_boot %>'\
-                 "\n"\
-                 '<%= chef_command %>'
 
       validator_file = File.join(
         bootstrap_def['config_dir'],
@@ -27,7 +22,7 @@ describe 'overseer bootstrap' do
 
       FileUtils.mkdir_p(bootstrap_def['config_dir'])
       FileUtils.mkdir_p(template_dir)
-      File.open(template_file,'w') { |f| f.write(template) }
+      File.open(template_file,'w') { |f| f.write(SpecHelpers::BOOTSTRAP_TEMPLATE) }
       FileUtils.touch(validator_file)
     end
 
