@@ -1,8 +1,8 @@
-module Overseer
+module Rivet
   module AwsUtils
 
     def self.verify_security_groups(groups)
-      Overseer::Log.info("Verifying security groups: #{groups.join(",")}")
+      Rivet::Log.info("Verifying security groups: #{groups.join(",")}")
 
       security_groups_collection = AWS::EC2.new().security_groups
       filtered_groups = Array.new
@@ -12,7 +12,7 @@ module Overseer
 
       groups.each do |g|
         unless filtered_groups.include?(g)
-          Overseer::Log.debug("Creating security group #{g}")
+          Rivet::Log.debug("Creating security group #{g}")
           security_groups_collection.create g
         end
       end
@@ -53,7 +53,7 @@ module Overseer
     end
 
     def self.set_aws_credentials(profile)
-      Overseer::Log.info("Settings AWS credentials to #{profile} profile")
+      Rivet::Log.info("Settings AWS credentials to #{profile} profile")
       settings = config_parser
       aws_creds = nil
 

@@ -1,4 +1,4 @@
-module Overseer
+module Rivet
   class Autoscale
 
     REQUIRED_FIELDS = [:min_size,:max_size,:launch_configuration,:availability_zones] 
@@ -35,18 +35,18 @@ module Overseer
 
     def show_differences(level = 'info')
 
-      Overseer::Log.write(level, "Remote and local defintions match") unless differences?
+      Rivet::Log.write(level, "Remote and local defintions match") unless differences?
 
       differences.each_pair do |attr,values|
-        Overseer::Log.write(level,"#{attr}:")
-        Overseer::Log.write(level,"  remote: #{values['remote']}")
-        Overseer::Log.write(level,"  local:  #{values['local']}")
+        Rivet::Log.write(level,"#{attr}:")
+        Rivet::Log.write(level,"  remote: #{values['remote']}")
+        Rivet::Log.write(level,"  local:  #{values['local']}")
       end
     end
 
     def sync
       if differences?
-        Overseer::Log.info("Syncing autoscale group changes to AWS for #{@name}")
+        Rivet::Log.info("Syncing autoscale group changes to AWS for #{@name}")
         autoscale = AWS::AutoScaling.new()
         group = autoscale.groups[@name]
 
@@ -55,7 +55,7 @@ module Overseer
         @launch_config.save
         group.update(options)
       else
-        Overseer::Log.info("No autoscale differences to sync to AWS for #{@name}.")
+        Rivet::Log.info("No autoscale differences to sync to AWS for #{@name}.")
       end
     end
 

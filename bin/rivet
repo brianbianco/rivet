@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-require 'overseer'
-require 'overseer/client'
+require 'rivet'
+require 'rivet/client'
 
 DEBUG = Logger::DEBUG
 WARN  = Logger::WARN
@@ -39,5 +39,5 @@ end
 
 raise "--group [GROUP_NAME] argument is required!" if options[:group].nil?
 
-Overseer::Client.new.run(options)
+Rivet::Client.new.run(options)
 

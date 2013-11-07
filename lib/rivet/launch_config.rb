@@ -1,4 +1,4 @@
-module Overseer
+module Rivet
   class LaunchConfig
 
     LC_ATTRIBUTES = ['key_name','image_id','instance_type','security_groups','bootstrap']
@@ -9,7 +9,7 @@ module Overseer
 
     attr_reader :id_prefix
 
-    def initialize(spec,id_prefix="overseer_")
+    def initialize(spec,id_prefix="rivet_")
       @id_prefix = id_prefix
 
       LC_ATTRIBUTES.each do |a|
@@ -36,11 +36,11 @@ module Overseer
       lc_collection = AWS::AutoScaling.new().launch_configurations
 
       if lc_collection[identity].exists?
-        Overseer::Log.info("Launch configuration #{identity} already exists in AWS")
+        Rivet::Log.info("Launch configuration #{identity} already exists in AWS")
       else
         options = { :key_pair => key_name, :security_groups => security_groups, :user_data => user_data}
-        Overseer::Log.info("Saving launch configuration #{identity} to AWS")
-        Overseer::Log.debug("Launch Config options:\n #{options.inspect}")
+        Rivet::Log.info("Saving launch configuration #{identity} to AWS")
+        Rivet::Log.debug("Launch Config options:\n #{options.inspect}")
         lc_collection.create(identity,image_id,instance_type, options)
       end
     end
@@ -50,10 +50,10 @@ module Overseer
     def generate_identity
       identity = LC_ATTRIBUTES.inject({}) do |ident_hash,attribute|
         if attribute != 'bootstrap'
-          Overseer::Log.debug("Adding #{attribute} : #{self.send(attribute.to_sym)} to identity hash for LaunchConfig")
+          Rivet::Log.debug("Adding #{attribute} : #{self.send(attribute.to_sym)} to identity hash for LaunchConfig")
           ident_hash[attribute] = self.send(attribute.to_sym)
         else
-          Overseer::Log.debug("Adding user_data to identity hash for LaunchConfig:\n#{user_data} ")
+          Rivet::Log.debug("Adding user_data to identity hash for LaunchConfig:\n#{user_data} ")
           ident_hash[attribute] = user_data
         end
         ident_hash

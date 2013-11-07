@@ -1,4 +1,4 @@
-module Overseer
+module Rivet
 
   module Log
 
@@ -34,7 +34,7 @@ module Overseer
       def initialize
         @dev = Logger::LogDevice.new(STDOUT)
         super @dev
-        @progname = "Overseer"
+        @progname = "Rivet"
         @formatter = proc do |sev,datetime,name,msg|
           "[#{name}] [#{datetime}] [#{sev}]: #{msg}\n"
         end

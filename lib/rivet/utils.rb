@@ -1,9 +1,9 @@
-module Overseer
+module Rivet
   module Utils
     AUTOSCALE_DIR = "autoscale"
 
     def self.die(level = 'fatal',message)
-      Overseer::Log.write(level,message)
+      Rivet::Log.write(level,message)
       exit
     end
 
@@ -11,7 +11,7 @@ module Overseer
       if Dir.exists?(AUTOSCALE_DIR)
         true
       else
-        Overseer::Log.info("Creating #{AUTOSCALE_DIR}")
+        Rivet::Log.info("Creating #{AUTOSCALE_DIR}")
         Dir.mkdir(AUTOSCALE_DIR)
       end
     end
@@ -33,10 +33,10 @@ module Overseer
       defaults_file = File.join(autoscale_dir,"defaults.yml")
       if File.exists?(defaults_file)
         parsed = begin
-          Overseer::Log.debug("Consuming defaults from #{defaults_file}")
+          Rivet::Log.debug("Consuming defaults from #{defaults_file}")
           YAML.load(File.open(defaults_file))
         rescue ArgumentError => e
-          Overseer::Log.fatal("Could not parse YAML from #{defaults_file}: #{e.message}")
+          Rivet::Log.fatal("Could not parse YAML from #{defaults_file}: #{e.message}")
         end
         parsed
       else
@@ -51,11 +51,11 @@ module Overseer
       definition_dir = File.join(AUTOSCALE_DIR,name)
       conf_file      = File.join(definition_dir,"conf.yml")
       if Dir.exists?(definition_dir) && File.exists?(conf_file)
-        Overseer::Log.debug("Loading definition for #{name} from #{conf_file}")
+        Rivet::Log.debug("Loading definition for #{name} from #{conf_file}")
         parsed = begin
           YAML.load(File.open(conf_file))
         rescue
-          Overseer::Log.fatal("Could not parse YAML from #{conf_file}: #{e.message}")
+          Rivet::Log.fatal("Could not parse YAML from #{conf_file}: #{e.message}")
         end
         parsed ? parsed : { }
       else

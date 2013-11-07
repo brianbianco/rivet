@@ -1,9 +1,9 @@
-require_relative './overseer_spec_setup'
+require_relative './rivet_spec_setup'
 
 include SpecHelpers
 
-describe 'overseer bootstrap' do
-  let (:bootstrap) { Overseer::Bootstrap.new(SpecHelpers::AUTOSCALE_DEF['bootstrap']) }
+describe 'rivet bootstrap' do
+  let (:bootstrap) { Rivet::Bootstrap.new(SpecHelpers::AUTOSCALE_DEF['bootstrap']) }
   let (:bootstrap_def) { SpecHelpers::AUTOSCALE_DEF['bootstrap'] }
 
   tempdir_context 'with all necessary files in place' do
@@ -16,7 +16,7 @@ describe 'overseer bootstrap' do
 
       template_dir = File.join(
         bootstrap_def['config_dir'],
-        Overseer::Bootstrap::TEMPLATE_SUB_DIR)
+        Rivet::Bootstrap::TEMPLATE_SUB_DIR)
 
       template_file = File.join(template_dir,bootstrap_def['template'])
 

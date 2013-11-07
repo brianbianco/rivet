@@ -1,16 +1,16 @@
-require_relative './overseer_spec_setup'
+require_relative './rivet_spec_setup'
 
 include SpecHelpers
 
 
-describe "overseer launch config" do
-  let (:launch_config) { Overseer::LaunchConfig.new(SpecHelpers::AUTOSCALE_DEF) }
+describe "rivet launch config" do
+  let (:launch_config) { Rivet::LaunchConfig.new(SpecHelpers::AUTOSCALE_DEF) }
 
   context "with a valid autoscale definition" do
     before do
       user_data_mock = double('user_data_mock')
       user_data_mock.stub(:user_data).and_return("unit_test_user_data")
-      Overseer::Bootstrap.stub(:new).and_return(user_data_mock)
+      Rivet::Bootstrap.stub(:new).and_return(user_data_mock)
     end
 
     describe "#identity" do

@@ -1,4 +1,4 @@
-module Overseer
+module Rivet
   class Bootstrap
     TEMPLATE_SUB_DIR = "bootstrap"
 

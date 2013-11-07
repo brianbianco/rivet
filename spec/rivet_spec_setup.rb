@@ -2,9 +2,9 @@ require 'rspec'
 require 'fileutils'
 require 'tempfile'
 require 'pathname'
-require_relative '../lib/overseer'
+require_relative '../lib/rivet'
 
-Overseer::Log.level(Logger::FATAL)
+Rivet::Log.level(Logger::FATAL)
 
 
 module SpecHelpers
@@ -16,7 +16,7 @@ module SpecHelpers
                         "\n"\
                         '<%= chef_command %>'
 
-  AUTOSCALE_DEF_IDENTITY = "overseer_ad82d3eaf94d9bbee6bc73f52ab3f4a1942d1fd3"
+  AUTOSCALE_DEF_IDENTITY = "rivet_ad82d3eaf94d9bbee6bc73f52ab3f4a1942d1fd3"
 
   AUTOSCALE_DEF = {
     'min_size' => 1,

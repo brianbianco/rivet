@@ -1,9 +1,9 @@
-require_relative './overseer_spec_setup'
+require_relative './rivet_spec_setup'
 
 include SpecHelpers
 
 definition_name = "unit_test"
-definition_dir  = File.join(Overseer::Utils::AUTOSCALE_DIR,definition_name)
+definition_dir  = File.join(Rivet::Utils::AUTOSCALE_DIR,definition_name)
 launch_config_params = ['ssh_key','instance_size','security_groups','ami','bootstrap']
 
 defaults_hash = {
@@ -28,42 +28,42 @@ unit_test_definition_hash = {
   }
 }
 
-describe "overseer utils" do
+describe "rivet utils" do
   tempdir_context "without an autoscaling directory" do
     describe "ensure_minimum_setup" do
       it "creates the autoscale directory if it doesn't exist" do
-        Overseer::Utils.ensure_minimum_setup
-        Dir.exists?(Overseer::Utils::AUTOSCALE_DIR).should be_true
+        Rivet::Utils.ensure_minimum_setup
+        Dir.exists?(Rivet::Utils::AUTOSCALE_DIR).should be_true
       end
     end
   end
 
   tempdir_context "with an autoscaling directory" do
     before do
-      FileUtils.mkdir_p(Overseer::Utils::AUTOSCALE_DIR)
+      FileUtils.mkdir_p(Rivet::Utils::AUTOSCALE_DIR)
     end
 
     describe "ensure_minimum_setup" do
       it "should return true" do
-        Overseer::Utils.ensure_minimum_setup.should be_true
+        Rivet::Utils.ensure_minimum_setup.should be_true
       end
     end
 
     describe "consume_defaults" do
       it "should return false" do
-        Overseer::Utils.consume_defaults.should be_false
+        Rivet::Utils.consume_defaults.should be_false
       end
     end
 
     describe "load_definition" do
       it "should return false" do
-        Overseer::Utils.load_definition("unit_test").should be_false
+        Rivet::Utils.load_definition("unit_test").should be_false
       end
     end
 
     describe "get_definition" do
       it "should return false" do
-        Overseer::Utils.get_definition("unit_test")
+        Rivet::Utils.get_definition("unit_test")
       end
     end
 
@@ -74,7 +74,7 @@ describe "overseer utils" do
 
       describe "load_definition" do
         it "should return false" do
-          Overseer::Utils.load_definition("unit_test").should be_false
+          Rivet::Utils.load_definition("unit_test").should be_false
         end
       end
 
@@ -87,27 +87,27 @@ describe "overseer utils" do
         end
         describe "load_definition" do
           it "returns a hash" do
-            loaded_def = Overseer::Utils.load_definition("unit_test")
+            loaded_def = Rivet::Utils.load_definition("unit_test")
             unit_test_definition_hash.each_pair { |k,v| loaded_def.should include(k => v) }
           end
         end
         context "and with a defaults.yml" do
           before do
-            File.open(File.join(Overseer::Utils::AUTOSCALE_DIR,"defaults.yml"),'w') do |f|
+            File.open(File.join(Rivet::Utils::AUTOSCALE_DIR,"defaults.yml"),'w') do |f|
               f.write(defaults_hash.to_yaml)
             end
           end
 
           describe "consume_defaults" do
             it "consume defaults returns a hash" do
-              results = Overseer::Utils.consume_defaults
+              results = Rivet::Utils.consume_defaults
               defaults_hash.each_pair { |k,v| results.should include(k => v) }
             end
           end
 
          describe "get_definition" do
            it "returns a merged hash" do
-            result = Overseer::Utils.get_definition(definition_name)
+            result = Rivet::Utils.get_definition(definition_name)
             merged_hash = defaults_hash.merge(unit_test_definition_hash)
             result.should == defaults_hash.merge(unit_test_definition_hash)
            end
