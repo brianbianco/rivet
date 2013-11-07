@@ -7,7 +7,11 @@ module Overseer
       attr_reader a.to_sym
     end
 
-    def initialize(spec)
+    attr_reader :id_prefix
+
+    def initialize(spec,id_prefix="overseer_")
+      @id_prefix = id_prefix
+
       LC_ATTRIBUTES.each do |a|
 
         if respond_to? "normalize_#{a}".to_sym
@@ -54,7 +58,7 @@ module Overseer
         end
         ident_hash
       end
-      Digest::SHA1.hexdigest(Marshal::dump(identity))
+      @id_prefix + Digest::SHA1.hexdigest(Marshal::dump(identity))
     end
 
     def normalize_security_groups(groups)
