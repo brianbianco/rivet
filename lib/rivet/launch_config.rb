@@ -47,7 +47,27 @@ module Rivet
 
     protected
 
+    def build_identity_string
+      identity = LC_ATTRIBUTES.inject(String.new) do |accum,attribute|
+        if attribute != 'bootstrap'
+          attr_value = self.send(attribute.to_sym) ? self.send(attribute.to_sym) : "\0"
+          attr_value = attr_value.join("\t") if attr_value.respond_to?(:join)
+          accum << attribute.to_s
+          accum << Base64.encode64(attr_value)
+        else
+          accum << attribute.to_s
+          accum << Base64.encode64(user_data ? user_data : "\0")
+        end
+        accum
+      end
+      identity
+    end
+
     def generate_identity
+      @id_prefix + Digest::SHA1.hexdigest(build_identity_string)
+    end
+
+    def old_generate_identity
       identity = LC_ATTRIBUTES.inject({}) do |ident_hash,attribute|
         if attribute != 'bootstrap'
           Rivet::Log.debug("Adding #{attribute} : #{self.send(attribute.to_sym)} to identity hash for LaunchConfig")

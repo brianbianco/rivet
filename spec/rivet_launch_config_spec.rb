@@ -2,7 +2,6 @@ require_relative './rivet_spec_setup'
 
 include SpecHelpers
 
-
 describe "rivet launch config" do
   let (:launch_config) { Rivet::LaunchConfig.new(SpecHelpers::AUTOSCALE_DEF) }
 
@@ -13,10 +12,16 @@ describe "rivet launch config" do
       Rivet::Bootstrap.stub(:new).and_return(user_data_mock)
     end
 
+    describe "#build_identity_string" do
+      it "should return a valid identity_string" do
+        launch_config.send(:build_identity_string).should == SpecHelpers::AUTOSCALE_IDENTITY_STRING
+      end
+    end
+
     describe "#identity" do
       it "should return a deterministic identity" do
-        launch_config.identity.should == SpecHelpers::AUTOSCALE_DEF_IDENTITY 
-     end
+        launch_config.identity.should == "rivet_#{Digest::SHA1.hexdigest(SpecHelpers::AUTOSCALE_IDENTITY_STRING)}"
+      end
     end
 
     describe "#normalize_security_groups" do

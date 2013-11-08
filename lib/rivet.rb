@@ -1,4 +1,5 @@
 require 'aws-sdk'
+require 'base64'
 require 'digest/sha1'
 require 'erb'
 require 'json'

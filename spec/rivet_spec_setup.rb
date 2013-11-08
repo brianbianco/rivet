@@ -2,6 +2,7 @@ require 'rspec'
 require 'fileutils'
 require 'tempfile'
 require 'pathname'
+require 'base64'
 require_relative '../lib/rivet'
 
 Rivet::Log.level(Logger::FATAL)
@@ -16,7 +17,6 @@ module SpecHelpers
                         "\n"\
                         '<%= chef_command %>'
 
-  AUTOSCALE_DEF_IDENTITY = "rivet_ad82d3eaf94d9bbee6bc73f52ab3f4a1942d1fd3"
 
   AUTOSCALE_DEF = {
     'min_size' => 1,
@@ -36,6 +36,12 @@ module SpecHelpers
       'run_list' => ['unit_tests']
     }
   }
+
+  AUTOSCALE_IDENTITY_STRING = "key_name#{Base64.encode64(AUTOSCALE_DEF['key_name'])}"\
+                              "image_id#{Base64.encode64(AUTOSCALE_DEF['image_id'])}"\
+                              "instance_type#{Base64.encode64(AUTOSCALE_DEF['instance_type'])}"\
+                              "security_groups#{Base64.encode64(AUTOSCALE_DEF['security_groups'].join("\t"))}"\
+                              "bootstrap#{Base64.encode64('unit_test_user_data')}"\
 
   def tempdir_context(name, &block)
     context name do
