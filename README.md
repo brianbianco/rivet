@@ -34,13 +34,13 @@ An example config could look as follows:
 
 ```
 [default]
-aws\_access\_key\_id<YOUR ACCESS KEY ID>
-aws\_secret\_access\_key=<YOUR SECRET ACCESS KEY>
+aws_access_key_id<YOUR ACCESS KEY ID>
+aws_secret_access_key=<YOUR SECRET ACCESS KEY>
 region=us-east-1
 
 [foo]
-aws\_access\_key\_id=<YOUR ACCESS KEY ID>
-aws\_secret\_access\_key=<YOUR SECRET_ACCESS KEY>
+aws_access_key_id=<YOUR ACCESS KEY ID>
+aws_secret_access_key=<YOUR SECRET_ACCESS KEY>
 region=us-west-2
 ```
 
@@ -99,12 +99,14 @@ A validator pem (named by the bootstrap -> environment key as <environment>-vali
 Usage
 =====
 
+```
 Usage: rivet [options]
     -g, --group [GROUP_NAME]         Autoscaling group name
     -l, --log-level [LEVEL]          specify the log level (default is INFO)
     -p, --profile [PROFILE_NAME]     Selects the AWS profile to use (default is 'default')
     -s, --sync                       Sync the changes remotely to AWS
     -h
+```
 
 Using rivet to check the differences for the example_group autoscaling group
 
