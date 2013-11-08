@@ -32,6 +32,7 @@ Right now Rivet only uses the following options from the file:
 
 An example config could look as follows:
 
+```
 [default]
 aws\_access\_key\_id<YOUR ACCESS KEY ID>
 aws\_secret\_access\_key=<YOUR SECRET ACCESS KEY>
@@ -41,6 +42,7 @@ region=us-east-1
 aws\_access\_key\_id=<YOUR ACCESS KEY ID>
 aws\_secret\_access\_key=<YOUR SECRET_ACCESS KEY>
 region=us-west-2
+```
 
 Alternatively you can specify your AWS\_ACCESS\_KEY\_ID and AWS\_SECRET\_ACCESS\_KEY as environment variables. 
 
@@ -56,10 +58,12 @@ Example files can be found in the example/ directory in the rivet git repository
 
 You should create an "autoscale" directory wherever you plan to run rivet from.  Currently it always looks in the current directory for definition files.  It expects a directory structure as such.
 
+```
 ./autoscale
       | - defaults.yml
       | - <autoscale group name>
                   | - conf.yml
+```
 
 defaults.yml and conf.yml both accept all the same options.  A groups definition will be deep merged over the defaults.
 
