@@ -23,6 +23,9 @@ Gem::Specification.new do |spec|
   spec.executables  = %w(rivet)
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "aws-sdk", "~> 1.24.0"
+  spec.add_development_dependency "rake", ">= 10.1.0"
+  spec.add_development_dependency "rspec", "~> 2.14.1"
 end
 
 
