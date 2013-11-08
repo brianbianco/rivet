@@ -1,9 +1,13 @@
 language: ruby
 rvm:
  - 1.9.3
+ - rbx-2.1.1
  - rbx-head
  - jruby-head
 before_install:
+  - rvm get head; rvm use $TRAVIS_RUBY_VERSION --install --binary --fuzzy --debug
   - gem install bundler
-
+matrix:
+  allow_failures:
+    - rvm: rbx-head
 
