@@ -3,6 +3,7 @@ rvm:
  - 1.9.3
  - rbx-head
  - jruby-head
-
+before_install:
+  - gem install bundler
 
 
