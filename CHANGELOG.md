@@ -1,6 +1,10 @@
 Rivet CHANGELOG
 ===
 
+1.0.3 - Released 11/11/2013
+---
+  * Updates the Gemfile.lock as I failed to do that after changing the Gemfile
+
 1.0.2 - Released 11/11/2013
 ---
   * ACTUALLY changes the aws dependency since I apparently failed last time

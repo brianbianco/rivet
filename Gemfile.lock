@@ -240,7 +240,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aws-sdk (~> 1.24.0)
+  aws-sdk (>= 1.11.1)
   rake (>= 10.1.0)
   rspec (~> 2.14.1)
   rubysl
