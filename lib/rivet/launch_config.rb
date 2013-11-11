@@ -64,25 +64,12 @@ module Rivet
         end
         accum
       end
+      Rivet::Log.debug("Pre SHA1 identity string is #{identity}")
       identity
     end
 
     def generate_identity
       @id_prefix + Digest::SHA1.hexdigest(build_identity_string)
-    end
-
-    def old_generate_identity
-      identity = LC_ATTRIBUTES.inject({}) do |ident_hash,attribute|
-        if attribute != 'bootstrap'
-          Rivet::Log.debug("Adding #{attribute} : #{self.send(attribute.to_sym)} to identity hash for LaunchConfig")
-          ident_hash[attribute] = self.send(attribute.to_sym)
-        else
-          Rivet::Log.debug("Adding user_data to identity hash for LaunchConfig:\n#{user_data} ")
-          ident_hash[attribute] = user_data
-        end
-        ident_hash
-      end
-      @id_prefix + Digest::SHA1.hexdigest(Marshal::dump(identity))
     end
 
     def normalize_security_groups(groups)
