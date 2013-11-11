@@ -1,5 +1,10 @@
 Rivet CHANGELOG
 ===
+
+1.0.6 - Released 11/11/2013
+---
+  * Fixes a bug when using sync and the launch configuration does not exist
+
 1.0.5 - Released 11/11/2013
 ---
   * Removes an old unused function.  Adds additional logging to launch_config class

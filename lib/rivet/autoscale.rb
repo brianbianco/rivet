@@ -50,9 +50,9 @@ module Rivet
         autoscale = AWS::AutoScaling.new()
         group = autoscale.groups[@name]
 
+        @launch_config.save
         create(options) unless group.exists?
 
-        @launch_config.save
         group.update(options)
       else
         Rivet::Log.info("No autoscale differences to sync to AWS for #{@name}.")
