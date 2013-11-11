@@ -1,6 +1,11 @@
 Rivet CHANGELOG
 ===
 
+1.0.2 - Released 11/11/2013
+---
+  * ACTUALLY changes the aws dependency since I apparently failed last time
+
+
 1.0.1 - Released 11/11/2013
 ---
   * Changes aws-sdk dependency from 1.24.0 to >= 1.11.1 to avoid
