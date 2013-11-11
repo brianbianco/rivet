@@ -1,6 +1,10 @@
 Rivet CHANGELOG
 ===
 
+1.0.4 - Released 11/11/2013
+---
+  * Handles nil options in the launch_configuration gracefully.
+
 1.0.3 - Released 11/11/2013
 ---
   * Updates the Gemfile.lock as I failed to do that after changing the Gemfile

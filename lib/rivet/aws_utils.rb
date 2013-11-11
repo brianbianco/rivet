@@ -2,6 +2,7 @@ module Rivet
   module AwsUtils
 
     def self.verify_security_groups(groups)
+      return false if groups.nil?
       Rivet::Log.info("Verifying security groups: #{groups.join(",")}")
 
       security_groups_collection = AWS::EC2.new().security_groups

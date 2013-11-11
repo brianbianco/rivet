@@ -38,7 +38,11 @@ module Rivet
       if lc_collection[identity].exists?
         Rivet::Log.info("Launch configuration #{identity} already exists in AWS")
       else
-        options = { :key_pair => key_name, :security_groups => security_groups, :user_data => user_data}
+        options = {}
+        options[:key_pair] = key_name unless key_name.nil?
+        options[:security_groups] = security_groups unless security_groups.nil?
+        options[:user_data] = user_data unless user_data.nil?
+
         Rivet::Log.info("Saving launch configuration #{identity} to AWS")
         Rivet::Log.debug("Launch Config options:\n #{options.inspect}")
         lc_collection.create(identity,image_id,instance_type, options)
@@ -82,7 +86,7 @@ module Rivet
     end
 
     def normalize_security_groups(groups)
-      groups.sort
+      groups.nil? ? groups : groups.sort
     end
 
   end
