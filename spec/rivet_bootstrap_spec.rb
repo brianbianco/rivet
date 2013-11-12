@@ -59,11 +59,3 @@ describe 'rivet bootstrap' do
 
 end
 
-
-
-
-
-
-
-
-
