@@ -1,6 +1,11 @@
 Rivet CHANGELOG
 ===
 
+1.1.0 - Released 11/12/13
+---
+  * Rivet no allows you to specify a directory with the -d [--definitions-directory] option
+  * Rivet no longer creates the autoscale directory if it does not exist
+
 1.0.8 - Released 11/12/13
 ---
   * Fixes the unit tests which were incorrect.
