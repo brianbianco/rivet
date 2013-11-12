@@ -12,7 +12,8 @@ INFO  = Logger::INFO
 # Default option values
 options = {
   :log_level => INFO,
-  :profile => 'default'
+  :profile => 'default',
+  :definitions_directory => './autoscale'
 }
 
 OptionParser.new do |o|
@@ -31,6 +32,10 @@ OptionParser.new do |o|
 
   o.on('-s', '--sync', "Sync the changes remotely to AWS") do |s|
     options[:sync] = s
+  end
+
+  o.on('-d', '--definitions-directory [PATH]', "The autoscale definitions directory to use (default is ./autoscale)") do |d|
+    options[:definitions_directory] = d
   end
 
   o.on('-h') { puts o; exit }

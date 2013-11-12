@@ -6,11 +6,18 @@ module Rivet
     def run(options)
       AwsUtils.set_aws_credentials(options[:profile])
       Rivet::Log.level(options[:log_level])
-      Rivet::Utils.ensure_minimum_setup
 
-      group_def = Rivet::Utils.get_definition(options[:group])
+      unless Dir.exists?(options[:definitions_directory])
+        Rivet::Utils.die("The autoscale definitions directory doesn't exist")
+      end
 
-      Rivet::Utils.die "The #{options[:group]} definition doesn't exist" unless group_def
+      group_def = Rivet::Utils.get_definition(
+        options[:group],
+        options[:definitions_directory])
+
+      unless group_def
+        Rivet::Utils.die "The #{options[:group]} definition doesn't exist"
+      end
 
       Rivet::Log.info("Checking #{options[:group]} autoscaling definition")
       autoscale_def = Rivet::Autoscale.new(options[:group],group_def)

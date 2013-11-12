@@ -2,8 +2,9 @@ require_relative './rivet_spec_setup'
 
 include SpecHelpers
 
+AUTOSCALE_DIR   = "."
 DEFINITION_NAME = "unit_test"
-DEFINITION_DIR  = File.join(Rivet::Utils::AUTOSCALE_DIR,DEFINITION_NAME)
+DEFINITION_DIR  = File.join(AUTOSCALE_DIR,DEFINITION_NAME)
 LAUNCH_CONFIG_PARAMS = ['ssh_key','instance_size','security_groups','ami','bootstrap']
 
 defaults_hash = {
@@ -29,41 +30,26 @@ unit_test_definition_hash = {
 }
 
 describe "rivet utils" do
-  tempdir_context "without an autoscaling directory" do
-    describe "ensure_minimum_setup" do
-      it "creates the autoscale directory if it doesn't exist" do
-        Rivet::Utils.ensure_minimum_setup
-        Dir.exists?(Rivet::Utils::AUTOSCALE_DIR).should be_true
-      end
-    end
-  end
-
   tempdir_context "with an autoscaling directory" do
     before do
-      FileUtils.mkdir_p(Rivet::Utils::AUTOSCALE_DIR)
-    end
-
-    describe "ensure_minimum_setup" do
-      it "should return true" do
-        Rivet::Utils.ensure_minimum_setup.should be_true
-      end
+      FileUtils.mkdir_p(AUTOSCALE_DIR)
     end
 
     describe "consume_defaults" do
       it "should return false" do
-        Rivet::Utils.consume_defaults.should be_false
+        Rivet::Utils.consume_defaults(AUTOSCALE_DIR).should be_false
       end
     end
 
     describe "load_definition" do
       it "should return false" do
-        Rivet::Utils.load_definition("unit_test").should be_false
+        Rivet::Utils.load_definition("unit_test",AUTOSCALE_DIR).should be_false
       end
     end
 
     describe "get_definition" do
       it "should return false" do
-        Rivet::Utils.get_definition("unit_test")
+        Rivet::Utils.get_definition("unit_test",AUTOSCALE_DIR)
       end
     end
 
@@ -74,7 +60,7 @@ describe "rivet utils" do
 
       describe "load_definition" do
         it "should return false" do
-          Rivet::Utils.load_definition("unit_test").should be_false
+          Rivet::Utils.load_definition("unit_test",AUTOSCALE_DIR).should be_false
         end
       end
 
@@ -87,27 +73,27 @@ describe "rivet utils" do
         end
         describe "load_definition" do
           it "returns a hash" do
-            loaded_def = Rivet::Utils.load_definition("unit_test")
+            loaded_def = Rivet::Utils.load_definition("unit_test",AUTOSCALE_DIR)
             unit_test_definition_hash.each_pair { |k,v| loaded_def.should include(k => v) }
           end
         end
         context "and with a defaults.yml" do
           before do
-            File.open(File.join(Rivet::Utils::AUTOSCALE_DIR,"defaults.yml"),'w') do |f|
+            File.open(File.join(AUTOSCALE_DIR,"defaults.yml"),'w') do |f|
               f.write(defaults_hash.to_yaml)
             end
           end
 
           describe "consume_defaults" do
             it "consume defaults returns a hash" do
-              results = Rivet::Utils.consume_defaults
+              results = Rivet::Utils.consume_defaults(AUTOSCALE_DIR)
               defaults_hash.each_pair { |k,v| results.should include(k => v) }
             end
           end
 
          describe "get_definition" do
            it "returns a merged hash" do
-            result = Rivet::Utils.get_definition(DEFINITION_NAME)
+            result = Rivet::Utils.get_definition(DEFINITION_NAME,AUTOSCALE_DIR)
             merged_hash = defaults_hash.merge(unit_test_definition_hash)
             result.should == defaults_hash.merge(unit_test_definition_hash)
            end
