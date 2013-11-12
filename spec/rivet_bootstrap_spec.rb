@@ -38,8 +38,8 @@ describe 'rivet bootstrap' do
       end
 
       it 'returns a string that contains the run_list as json' do
-        run_list = { :run_list => bootstrap_def['run_list'].join(",") }.to_json
-        bootstrap.user_data.should =~ /#{run_list}/
+        run_list = { :run_list => bootstrap_def['run_list'].flatten }.to_json
+        bootstrap.user_data.should =~ /#{Regexp.escape(run_list)}/
       end
 
       it 'returns a string that contains each gem to install' do

@@ -27,6 +27,7 @@ module SpecHelpers
     'instance_type' => 'm1.large',
     'security_groups' => ['unit_tests1','unit_tests2'],
     'image_id' => 'ami-12345678',
+    'iam_instance_profile' => 'unit_test_profile',
     'bootstrap' => {
       'chef_organization' => 'unit_tests',
       'template' => 'default.erb',
@@ -41,6 +42,7 @@ module SpecHelpers
                               "image_id#{Base64.encode64(AUTOSCALE_DEF['image_id'])}"\
                               "instance_type#{Base64.encode64(AUTOSCALE_DEF['instance_type'])}"\
                               "security_groups#{Base64.encode64(AUTOSCALE_DEF['security_groups'].join("\t"))}"\
+                              "iam_instance_profile#{Base64.encode64(AUTOSCALE_DEF['iam_instance_profile'])}"\
                               "bootstrap#{Base64.encode64('unit_test_user_data')}"\
 
   def tempdir_context(name, &block)
