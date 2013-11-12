@@ -56,7 +56,8 @@ Autoscaling group definition directories and files
 
 Example files can be found in the example/ directory in the rivet git repository
 
-You should create an "autoscale" directory wherever you plan to run rivet from.  Currently it always looks in the current directory for definition files.  It expects a directory structure as such.
+Rivet will look in the directory specified on the command line (or ./autoscale by default) for some definitions.  It expects autoscale groups to have a directory named for them
+with a conf.yml inside of it as well as a defaults.yml in whatever directory you use for your autoscaling group definitions.
 
 ```
 ./autoscale
@@ -106,6 +107,8 @@ Usage: rivet [options]
     -l, --log-level [LEVEL]          specify the log level (default is INFO)
     -p, --profile [PROFILE_NAME]     Selects the AWS profile to use (default is 'default')
     -s, --sync                       Sync the changes remotely to AWS
+    -d [PATH],                       The autoscale definitions directory to use (default is ./autoscale)
+        --definitions-directory
     -h
 ```
 
