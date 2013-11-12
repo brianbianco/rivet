@@ -2,9 +2,9 @@ require_relative './rivet_spec_setup'
 
 include SpecHelpers
 
-definition_name = "unit_test"
-definition_dir  = File.join(Rivet::Utils::AUTOSCALE_DIR,definition_name)
-launch_config_params = ['ssh_key','instance_size','security_groups','ami','bootstrap']
+DEFINITION_NAME = "unit_test"
+DEFINITION_DIR  = File.join(Rivet::Utils::AUTOSCALE_DIR,DEFINITION_NAME)
+LAUNCH_CONFIG_PARAMS = ['ssh_key','instance_size','security_groups','ami','bootstrap']
 
 defaults_hash = {
   'min_size' => 0,
@@ -69,7 +69,7 @@ describe "rivet utils" do
 
     context "and with a group directory" do
       before do
-        FileUtils.mkdir_p definition_dir
+        FileUtils.mkdir_p DEFINITION_DIR
       end
 
       describe "load_definition" do
@@ -80,8 +80,8 @@ describe "rivet utils" do
 
       context "and with a conf.yml" do
         before do
-          FileUtils.mkdir_p definition_dir
-          File.open(File.join(definition_dir,"conf.yml"),'w') do |f|
+          FileUtils.mkdir_p DEFINITION_DIR
+          File.open(File.join(DEFINITION_DIR,"conf.yml"),'w') do |f|
             f.write(unit_test_definition_hash.to_yaml)
           end
         end
@@ -107,7 +107,7 @@ describe "rivet utils" do
 
          describe "get_definition" do
            it "returns a merged hash" do
-            result = Rivet::Utils.get_definition(definition_name)
+            result = Rivet::Utils.get_definition(DEFINITION_NAME)
             merged_hash = defaults_hash.merge(unit_test_definition_hash)
             result.should == defaults_hash.merge(unit_test_definition_hash)
            end
