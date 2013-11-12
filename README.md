@@ -74,6 +74,7 @@ min_size: SIZE <integer>
 max_size: SIZE <integer>
 region: AWS REGION <STRING>
 availability_zones: [ZONE<string>,ZONE...]
+iam_instance_profile: INSTANCE_PROFILE <string>
 
 bootstrap:
   chef_organization: CHEF_ORGANIZATION <string>

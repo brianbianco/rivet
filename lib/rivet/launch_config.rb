@@ -1,7 +1,7 @@
 module Rivet
   class LaunchConfig
 
-    LC_ATTRIBUTES = ['key_name','image_id','instance_type','security_groups','bootstrap']
+    LC_ATTRIBUTES = ['key_name','image_id','instance_type','security_groups','iam_instance_profile','bootstrap']
 
     LC_ATTRIBUTES.each do |a|
       attr_reader a.to_sym
@@ -18,6 +18,7 @@ module Rivet
           spec[a] = self.send("normalize_#{a.to_sym}",spec[a])
         end
 
+        Rivet::Log.debug("Setting LaunchConfig @#{a} to #{spec[a]}")
         instance_variable_set("@#{a}",spec[a])
       end
     end
@@ -42,6 +43,7 @@ module Rivet
         options[:key_pair] = key_name unless key_name.nil?
         options[:security_groups] = security_groups unless security_groups.nil?
         options[:user_data] = user_data unless user_data.nil?
+        options[:iam_instance_profile] = iam_instance_profile unless iam_instance_profile.nil?
 
         Rivet::Log.info("Saving launch configuration #{identity} to AWS")
         Rivet::Log.debug("Launch Config options:\n #{options.inspect}")
