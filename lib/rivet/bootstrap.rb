@@ -52,7 +52,7 @@ module Rivet
         end
       end unless gems.nil?
 
-      first_boot = { :run_list => @run_list.join(",") }.to_json unless @run_list.nil?
+      first_boot = { :run_list => @run_list.flatten }.to_json unless @run_list.nil?
 
       template = ERB.new File.new(File.join(@template_path,@template)).read
       template.result(binding)
