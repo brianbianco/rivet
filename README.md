@@ -2,18 +2,18 @@
 
 Rivet
 =======
-Rivet is a small utility which allows you to describe an autoscaling groups and it's launch configurations as yaml.  You can then sync those changes to AWS.
+Rivet enables you to describe autoscaling groups and their launch configurations as yaml.  You can then sync those changes to Amazon Web Services (AWS.)
 
-Rivet allows you to provide a template and it's options which will be rendered as user-data for your launch configurations.  It is currently opinionated and assumes you are trying to build
-a bootstrap script for chef installed via gems.  You can of course provide it with any template you desire, and in future releases this system will become more flexible and less opinionated.
+You provide a template and it's options to render as user-data for your launch configurations to build a bootstrap script for chef, installed via gems.  
 
-Rivet is also opinionated about how it names launch configurations, as it generates unique deterministic names for them and automatically assigns the proper launch configuration to your
+Rivet generates unique deterministic names for launch configurations and automatically assigns the proper launch configuration to your
 autoscaling group based upon it's generated identity.
+
 
 Installation
 ============
 
-gem install rivet
+`gem install rivet`
 
 Setup
 =====
@@ -25,16 +25,16 @@ Rivet uses the python AWS CLI tools [https://github.com/aws/aws-cli] configurati
 
 Right now Rivet only uses the following options from the file:
 
-* profile name
-* aws\_access\_key\_id
-* aws\_secret\_access\_key
-* region
+* `profile name`
+* `aws_access_key_id`
+* `aws_secret_access_key`
+* `region`
 
 An example config could look as follows:
 
-```
+```ini
 [default]
-aws_access_key_id<YOUR ACCESS KEY ID>
+aws_access_key_id=<YOUR ACCESS KEY ID>
 aws_secret_access_key=<YOUR SECRET ACCESS KEY>
 region=us-east-1
 
@@ -44,9 +44,9 @@ aws_secret_access_key=<YOUR SECRET_ACCESS KEY>
 region=us-west-2
 ```
 
-Alternatively you can specify your AWS\_ACCESS\_KEY\_ID and AWS\_SECRET\_ACCESS\_KEY as environment variables. 
+Alternatively you can specify your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` as environment variables. 
 
-You will still need to specify the region to use in your AWS\_CONFIG\_FILE.
+You will still need to specify the region to use in your `AWS_CONFIG_FILE`.
 
 Rivet will use the [default] profile if you do not specify a profile to use with the -p [--profile] option.
 
@@ -61,16 +61,16 @@ with a conf.yml inside of it as well as a defaults.yml in whatever directory you
 
 ```
 ./autoscale
-      | - defaults.yml
-      | - <autoscale group name>
-                  | - conf.yml
+  `- defaults.yml
+     `- <autoscale group name>
+        `- conf.yml
 ```
 
 defaults.yml and conf.yml both accept all the same options.  A groups definition will be deep merged over the defaults.
 
 The yaml file format:
 
-```
+```yaml
 min_size: SIZE <integer>
 max_size: SIZE <integer>
 region: AWS REGION <STRING>
@@ -94,8 +94,8 @@ Availability zones should use the single character of the zone.  The region will
 
 The following files should exist in the configuration directory specified under the bootstrap -> config_dir key:
 
-A template file (specified by the bootstrap -> template file name)
-A validator pem (named by the bootstrap -> environment key as <environment>-validator.pem)
+* A template file (specified by the bootstrap -> template file name)
+* A validator pem (named by the bootstrap -> environment key as <environment>-validator.pem)
 
 
 Usage
@@ -112,19 +112,19 @@ Usage: rivet [options]
     -h
 ```
 
-Using rivet to check the differences for the example_group autoscaling group
+check the differences for the example_group autoscaling group
 
 ```bash
 rivet -g example_group
 ```
 
-Using rivet to check the differences for the example_group using the foobar profile
+check the differences for the example_group using the foobar profile
 
 ```bash
 rivet -g example_group -p foobar
 ```
 
-Using rivet to sync the differences for the example_group using the foobar profile
+sync the differences for the example_group using the foobar profile
 
 ```bash
 rivet -g example_group -p foobar -s
