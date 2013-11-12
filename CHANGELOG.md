@@ -1,6 +1,11 @@
 Rivet CHANGELOG
 ===
 
+1.0.7 - Released 11/12/13
+---
+  * Fixes a bug where the run_list json was not rendered properly
+  * Adds the iam_instance_profile option to the launch config. 
+
 1.0.6 - Released 11/11/2013
 ---
   * Fixes a bug when using sync and the launch configuration does not exist
