@@ -23,14 +23,14 @@ module Rivet
       if ENV['AWS_CONFIG_FILE']
 
         current_profile = nil
-        profile_matcher = /^\[(.*)\]/
+        profile_matcher = /^\[(profile+\s)?(\w+)\]/
         option_matcher  = /(\w.*)=(\S.*)\s*/
         aws_config      = Hash.new
 
         File.open(ENV['AWS_CONFIG_FILE'],"r").each_line do |line|
 
           if line =~ profile_matcher
-            current_profile = line.match(profile_matcher)[1]
+            current_profile = line.match(profile_matcher)[2]
             aws_config[current_profile] = Hash.new unless aws_config.has_key?(current_profile)
           end
 
