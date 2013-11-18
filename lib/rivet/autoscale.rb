@@ -3,12 +3,24 @@ module Rivet
 
     REQUIRED_FIELDS = [:min_size,:max_size,:launch_configuration,:availability_zones] 
 
-    attr_reader :min_size, :max_size, :name, :launch_configuration, :availability_zones
+    attr_reader :min_size, :max_size, :name, :launch_configuration
+    attr_reader :availability_zones, :tags
 
     def initialize(name,definition)
       @name = name
       @min_size = definition['min_size']
       @max_size = definition['max_size']
+
+      if definition.has_key?('tags')
+        definition['tags'].each do |t|
+          unless t.has_key?('propagate_at_launch')
+            t['propagate_at_launch'] = true
+          end
+        end
+        @tags = definition['tags']
+      else
+        @tags = Array.new
+      end
       @launch_config = LaunchConfig.new(definition)
 
       # Normalizing zones to match what the SDK expects, E.G. "<region><zone>"
@@ -53,6 +65,9 @@ module Rivet
         @launch_config.save
         create(options) unless group.exists?
 
+        Rivet::Log.debug("Updating autoscaling group with the follow options")
+        Rivet::Log.debug(options.inspect)
+
         group.update(options)
       else
         Rivet::Log.info("No autoscale differences to sync to AWS for #{@name}.")
@@ -78,7 +93,7 @@ module Rivet
     def get_differences
       remote = get_remote
       differences = Hash.new
-      [:min_size,:max_size,:launch_configuration].each do |a|
+      [:min_size,:max_size,:launch_configuration,:tags].each do |a|
         if remote[a.to_s] != self.send(a)
           differences[a.to_s] = { 'remote' => remote[a.to_s], 'local' => self.send(a) }
         end
@@ -91,6 +106,8 @@ module Rivet
       differences
     end
 
+    protected
+
     def get_remote
       autoscale = AWS::AutoScaling.new()
       remote_group = autoscale.groups[@name]
@@ -99,6 +116,11 @@ module Rivet
         remote_hash = [:min_size,:max_size].inject(Hash.new) do |accum,attr|
           accum[attr.to_s] = remote_group.send(attr)
           accum
+        end
+
+        # {:resource_id=>"venus", :propagate_at_launch=>true, :value=>"Venus", :key=>"Name", :resource_type=>"auto-scaling-group"}
+        remote_hash['tags'] = remote_group.tags.to_a.inject(Array.new) do |tags,current|
+          tags << normalize_tag(current)
         end
 
         remote_hash['launch_configuration'] = remote_group.launch_configuration_name
@@ -119,6 +141,16 @@ module Rivet
       else
         autoscale.groups.create(@name,options)
       end
+    end
+
+    def normalize_tag(tag)
+      normalized_tag = Hash.new
+      tag.each_pair do |k,v|
+        unless (k == :resource_id || k == :resource_type)
+          normalized_tag[k.to_s] = v
+        end
+      end
+      normalized_tag
     end
 
   end
