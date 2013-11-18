@@ -33,12 +33,12 @@ Right now Rivet only uses the following options from the file:
 An example config could look as follows:
 
 ```ini
-[default]
+[profile default]
 aws_access_key_id=<YOUR ACCESS KEY ID>
 aws_secret_access_key=<YOUR SECRET ACCESS KEY>
 region=us-east-1
 
-[foo]
+[profile foo]
 aws_access_key_id=<YOUR ACCESS KEY ID>
 aws_secret_access_key=<YOUR SECRET_ACCESS KEY>
 region=us-west-2
@@ -76,6 +76,7 @@ max_size: SIZE <integer>
 region: AWS REGION <STRING>
 availability_zones: [ZONE<string>,ZONE...]
 iam_instance_profile: INSTANCE_PROFILE <string>
+tags: [ { key: KEY_NAME<string>, value: KEY_VALLUE<string> } ]
 
 bootstrap:
   chef_organization: CHEF_ORGANIZATION <string>
