@@ -1,6 +1,11 @@
 Rivet CHANGELOG
 ===
 
+1.2.0 - Released 11/18/13
+---
+  * Adds functionality to apply tags to autoscaling groups
+  * Updates Rivet to handle the new AWS CLI config file format (profiles now include the world profile in them)
+
 1.1.0 - Released 11/12/13
 ---
   * Rivet no allows you to specify a directory with the -d [--definitions-directory] option
