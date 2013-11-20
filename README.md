@@ -4,7 +4,7 @@ Rivet
 =======
 Rivet enables you to describe autoscaling groups and their launch configurations as yaml.  You can then sync those changes to Amazon Web Services (AWS.)
 
-You provide a template and it's options to render as user-data for your launch configurations to build a bootstrap script for chef, installed via gems.  
+You provide a template and it's options to render as user-data for your launch configurations to build a bootstrap script for chef, installed via gems.
 
 Rivet generates unique deterministic names for launch configurations and automatically assigns the proper launch configuration to your
 autoscaling group based upon it's generated identity.
@@ -44,7 +44,7 @@ aws_secret_access_key=<YOUR SECRET_ACCESS KEY>
 region=us-west-2
 ```
 
-Alternatively you can specify your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` as environment variables. 
+Alternatively you can specify your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` as environment variables.
 
 You will still need to specify the region to use in your `AWS_CONFIG_FILE`.
 
@@ -73,17 +73,27 @@ The yaml file format:
 ```yaml
 min_size: SIZE <integer>
 max_size: SIZE <integer>
-region: AWS REGION <STRING>
+region: AWS_REGION <string>
 availability_zones: [ZONE<string>,ZONE...]
 iam_instance_profile: INSTANCE_PROFILE <string>
-tags: [ { key: KEY_NAME<string>, value: KEY_VALLUE<string> } ]
+tags:
+  -
+    key: KEY_NAME<string>
+    value: KEY_VALUE<string>
+  -
+    key: KEY_NAME<string>
+    value: KEY_VALUE<string>
 
 bootstrap:
   chef_command: CHEF_COMMAND <string>
   chef_organization: CHEF_ORGANIZATION <string>
+  chef_username: CHEF_USERNAME <string>
   template: TEMPLATE <string>
   config_dir: CONFIGURATION_FILES_DIR <string>
   environment: CHEF_ENVIRONMENT <string>
+  region: AWS_REGION <string>
+  name: NAME <string>
+  elastic_ip: AWS_ELASTIC_IP <string>
   gems:
     - [GEM_NAME<string>,GEM_VERSION<string>]
     - [GEM_NAME<string>]

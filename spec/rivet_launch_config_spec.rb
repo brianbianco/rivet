@@ -26,9 +26,9 @@ describe "rivet launch config" do
 
     describe "#normalize_security_groups" do
       it "returns a sorted array of groups" do
-        unsorted_groups = ['group3','group1','group2']
+        unsorted_groups = %w(group3 group1 group2)
         sorted_groups = unsorted_groups.sort
-        returned_groups = launch_config.send(:normalize_security_groups,unsorted_groups)  
+        returned_groups = launch_config.send(:normalize_security_groups, unsorted_groups)
         returned_groups.should == sorted_groups
       end
     end

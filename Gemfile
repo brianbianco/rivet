@@ -8,4 +8,3 @@ group(:development, :test) do
 end
 
 gem 'aws-sdk',  '>= 1.11.1'
-

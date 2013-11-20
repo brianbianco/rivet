@@ -20,7 +20,7 @@ module Rivet
       end
 
       Rivet::Log.info("Checking #{options[:group]} autoscaling definition")
-      autoscale_def = Rivet::Autoscale.new(options[:group],group_def)
+      autoscale_def = Rivet::Autoscale.new(options[:group], group_def)
       autoscale_def.show_differences
 
       if options[:sync]
@@ -33,4 +33,3 @@ module Rivet
 
   end
 end
-

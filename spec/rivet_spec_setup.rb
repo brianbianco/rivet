@@ -7,33 +7,37 @@ require_relative '../lib/rivet'
 
 Rivet::Log.level(Logger::FATAL)
 
-
 module SpecHelpers
 
-
-   BOOTSTRAP_TEMPLATE = '<%= install_gems %>'\
-                        '<%= config_content %>'\
-                        '<%= first_boot %>'\
-                        "\n"\
-                        '<%= chef_command %>'
-
+ BOOTSTRAP_TEMPLATE = '<%= install_gems %>'\
+                      '<%= region %>' + "\n"\
+                      '<%= name %>' + "\n"\
+                      '<%= elastic_ip %>' + "\n"\
+                      '<%= knife_content %>'\
+                      '<%= first_boot %>'\
+                      "\n"\
+                      '<%= chef_command %>'
 
   AUTOSCALE_DEF = {
     'min_size' => 1,
     'max_size' => 3,
     'region'   => 'us-west-2',
-    'availability_zones' => ['a','b','c'],
+    'availability_zones' => %w(a b c),
     'key_name' => 'UnitTests',
     'instance_type' => 'm1.large',
-    'security_groups' => ['unit_tests1','unit_tests2'],
+    'security_groups' => %w(unit_tests1 unit_tests2),
     'image_id' => 'ami-12345678',
     'iam_instance_profile' => 'unit_test_profile',
     'bootstrap' => {
       'chef_organization' => 'unit_tests',
+      'chef_username' => 'unit_tests_user',
       'template' => 'default.erb',
       'config_dir' => 'unit_tests',
       'environment' => 'unit_tests',
-      'gems' => [ ['gem1','0.0.1'],['gem2','0.0.2'] ],
+      'region' => 'us-west-2',
+      'name' => 'unit_tests_name',
+      'elastic_ip' => '10.0.0.1',
+      'gems' => [ ['gem1', '0.0.1'], ['gem2', '0.0.2'] ],
       'run_list' => ['unit_tests']
     }
   }
