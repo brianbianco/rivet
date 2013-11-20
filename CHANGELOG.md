@@ -1,6 +1,10 @@
 Rivet CHANGELOG
 ===
 
+1.3.0 - Released 11/20/13
+---
+  * Adds functionality to allow chef_command to be specified in group configurations
+
 1.2.0 - Released 11/18/13
 ---
   * Adds functionality to apply tags to autoscaling groups
