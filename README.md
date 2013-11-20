@@ -79,6 +79,7 @@ iam_instance_profile: INSTANCE_PROFILE <string>
 tags: [ { key: KEY_NAME<string>, value: KEY_VALLUE<string> } ]
 
 bootstrap:
+  chef_command: CHEF_COMMAND <string>
   chef_organization: CHEF_ORGANIZATION <string>
   template: TEMPLATE <string>
   config_dir: CONFIGURATION_FILES_DIR <string>

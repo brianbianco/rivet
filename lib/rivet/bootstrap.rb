@@ -8,7 +8,7 @@ module Rivet
     def initialize(bootstrap_definition = Hash.new)
       ivars = [
         'gems','run_list','template','environment',
-        'config_dir','chef_organization']
+        'config_dir','chef_organization','chef_command']
 
       ivars.each do |i|
         if bootstrap_definition.has_key?(i)
@@ -30,7 +30,6 @@ module Rivet
 
     def set_calculated_attrs
       @template_path  = File.join(@config_dir,TEMPLATE_SUB_DIR)
-      @chef_command   = "/usr/bin/chef-client -j /etc/chef/first-boot.json -L /root/first_run.log -E #{@environment}"
       @secret_file    = File.join(@config_dir,"encrypted_data_bag_secret_#{@environment}")
       @validation_key = File.new(File.join(@config_dir,"#{@chef_organization}-validator.pem")).read
     end
