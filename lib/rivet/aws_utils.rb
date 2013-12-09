@@ -5,8 +5,8 @@ module Rivet
       return false if groups.nil?
       Rivet::Log.info("Verifying security groups: #{groups.join(",")}")
 
-      security_groups_collection = AWS::EC2.new().security_groups
-      filtered_groups = Array.new
+      security_groups_collection = AWS::EC2.new.security_groups
+      filtered_groups = []
       security_groups_collection.filter('group-name', *groups).each do |g|
         filtered_groups << g.name
       end
@@ -25,13 +25,13 @@ module Rivet
         current_profile = nil
         profile_matcher = /^\[(profile+\s)?(\w+)\]/
         option_matcher  = /(\w.*)=(\S.*)\s*/
-        aws_config      = Hash.new
+        aws_config      = {}
 
         File.open(ENV['AWS_CONFIG_FILE'],"r").each_line do |line|
 
           if line =~ profile_matcher
             current_profile = line.match(profile_matcher)[2]
-            aws_config[current_profile] = Hash.new unless aws_config.has_key?(current_profile)
+            aws_config[current_profile] = {} unless aws_config.has_key?(current_profile)
           end
 
           if line =~ option_matcher && !current_profile.nil?
@@ -49,7 +49,7 @@ module Rivet
           end
 
           end
-      aws_config
+        aws_config
       end
     end
 

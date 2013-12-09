@@ -1,16 +1,16 @@
 module Rivet
   module Utils
 
-    def self.die(level = 'fatal',message)
-      Rivet::Log.write(level,message)
+    def self.die(level = 'fatal', message)
+      Rivet::Log.write(level, message)
       exit
     end
 
     # This returns the merged definition given a group
 
-    def self.get_definition(group,directory)
+    def self.get_definition(group, directory)
       defaults = consume_defaults(directory)
-      group_def = load_definition(group,directory)
+      group_def = load_definition(group, directory)
 
       if defaults && group_def
         group_def = defaults.deep_merge(group_def)
@@ -21,8 +21,8 @@ module Rivet
     # Gobbles up the defaults file from YML, returns the hash or false if empty
 
     def self.consume_defaults(autoscale_dir)
-      defaults_file = File.join(autoscale_dir,"defaults.yml")
-      if File.exists?(defaults_file)
+      defaults_file = File.join(autoscale_dir, 'defaults.yml')
+      if File.exists? defaults_file
         parsed = begin
           Rivet::Log.debug("Consuming defaults from #{defaults_file}")
           YAML.load(File.open(defaults_file))
@@ -38,9 +38,9 @@ module Rivet
     # This loads the given definition from it's YML file, returns the hash or
     # false if empty
 
-    def self.load_definition(name,directory)
+    def self.load_definition(name, directory)
       definition_dir = File.join(directory,name)
-      conf_file      = File.join(definition_dir,"conf.yml")
+      conf_file      = File.join(definition_dir, 'conf.yml')
       if Dir.exists?(definition_dir) && File.exists?(conf_file)
         Rivet::Log.debug("Loading definition for #{name} from #{conf_file}")
         parsed = begin
@@ -56,4 +56,3 @@ module Rivet
 
   end
 end
-

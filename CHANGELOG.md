@@ -1,6 +1,13 @@
 Rivet CHANGELOG
 ===
 
+1.4.0 - Released 11/22/13
+---
+  * Adds functionality to apply an elastic_ip durning bootstrap
+  * Adds functionality to apply knife commands for a specified chef_username durning bootstrap
+  * Tweaked some of the code styling to adhere to common Ruby styling conventions:
+    https://github.com/bbatsov/ruby-style-guide
+
 1.3.0 - Released 11/20/13
 ---
   * Adds functionality to allow chef_command to be specified in group configurations
