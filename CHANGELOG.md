@@ -1,6 +1,15 @@
 Rivet CHANGELOG
 ===
 
+1.5.0 - Released 12/12/13
+---
+  * BREAKING CHANGE: The gem list in bootstrap['gems'] must be converted from a list of
+    Arrays to a Hash in yaml definition files, please look at README.md
+  * Added functionality to apply specific named configs in a group (merges into and takes
+    precedence over the group config) for nodes within a group that have unique attributes
+  * Improved Rivet's CLI option parser. It now uses OpenStruct instead of a Hash for the options,
+    has cleaner user error messages with cmd help displayed and supports exit status codes
+
 1.4.0 - Released 11/22/13
 ---
   * Adds functionality to apply an elastic_ip durning bootstrap

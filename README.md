@@ -57,16 +57,23 @@ Autoscaling group definition directories and files
 Example files can be found in the example/ directory in the rivet git repository
 
 Rivet will look in the directory specified on the command line (or ./autoscale by default) for some definitions.  It expects autoscale groups to have a directory named for them
-with a conf.yml inside of it as well as a defaults.yml in whatever directory you use for your autoscaling group definitions.
+with a conf.yml inside of it as well as a defaults.yml in whatever directory you use for your autoscaling group definitions. Optionally, you may specify a group's config, which
+will be used in addition to the group's conf.yml and will take precedence over the group's conf.yml. For example, a group could have node(s) or sets of node(s) that have unique
+attributes that differ from the base group's conf.yml.  Further, it expects these config(s) to be inside the group directory where the conf.yml also exists; there is no limit
+for the amount of configs within a group, but you may only choose one at runtime.
 
 ```
 ./autoscale
   `- defaults.yml
      `- <autoscale group name>
         `- conf.yml
+        `- <config name>.yml
 ```
 
-defaults.yml and conf.yml both accept all the same options.  A groups definition will be deep merged over the defaults.
+defaults.yml, conf.yml and <config name>.yml all accept all the same options.  A groups definition will be deep merged over the defaults. Any arrays will be replaced by the
+group definition.  If specified, a config name definition will also be deep merged over the resulting definition from the previous deep merge, except arrays will be
+concatenated (instead of replaced), duplicates in arrays will be removed (please don't rely on this, keep your configs clean) and the config name's
+bootstrap['run_list'] array position ordering (if used) will take precedence, see below.
 
 The yaml file format:
 
@@ -74,7 +81,7 @@ The yaml file format:
 min_size: SIZE <integer>
 max_size: SIZE <integer>
 region: AWS_REGION <string>
-availability_zones: [ZONE<string>,ZONE...]
+availability_zones: [ZONE<string>, ZONE...]
 iam_instance_profile: INSTANCE_PROFILE <string>
 tags:
   -
@@ -95,12 +102,17 @@ bootstrap:
   name: NAME <string>
   elastic_ip: AWS_ELASTIC_IP <string>
   gems:
-    - [GEM_NAME<string>,GEM_VERSION<string>]
-    - [GEM_NAME<string>]
+    GEM_NAME<string>: GEM_VERSION<string>
+    GEM_NAME<string>: ~
   run_list:
     - 'role[example]' <string>
+    - ['role[another_example_using_array_position]' <string>, ARRAY_POSITION <integer>]
 
 ```
+
+In the above example, under bootstrap['run_list'], if ARRAY_POSITION for 'role[another_example_using_array_position' was 0, it would come first,
+if ARRAY_POSITION was not used, it would come second as it respects the array's order by default. Please try to design definitions files to take advanage
+of the fact that they are arrays and inherently have an order whenever possible. In short, don't use this feature unless you really need it (keep configs SANE)!
 
 Availability zones should use the single character of the zone.  The region will be appended by rivet.
 
@@ -115,8 +127,9 @@ Usage
 
 ```
 Usage: rivet [options]
-    -g, --group [GROUP_NAME]         Autoscaling group name
-    -l, --log-level [LEVEL]          specify the log level (default is INFO)
+    -g, --group GROUP_NAME           Autoscaling group name
+    -c, --config [CONFIG_NAME]       Specify config name (exclude '.yml') within an autoscaling group (optional)
+    -l, --log-level [LEVEL]          Specify the log level (default is INFO)
     -p, --profile [PROFILE_NAME]     Selects the AWS profile to use (default is 'default')
     -s, --sync                       Sync the changes remotely to AWS
     -d [PATH],                       The autoscale definitions directory to use (default is ./autoscale)
