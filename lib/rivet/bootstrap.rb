@@ -55,11 +55,11 @@ module Rivet
 
       install_gems = ''
 
-      gems.each do |g|
-        if g.size > 1
-          install_gems << "gem install #{g[0]} -v #{g[1]} --no-rdoc --no-ri\n"
+      gems.each do |k, v|
+        if v
+          install_gems << "gem install #{k} -v #{v} --no-rdoc --no-ri\n"
         else
-          install_gems << "gem install #{g[0]} --no-rdoc --no-ri\n"
+          install_gems << "gem install #{k} --no-rdoc --no-ri\n"
         end
       end unless gems.nil?
 
