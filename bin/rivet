@@ -15,15 +15,10 @@ options                        = OpenStruct.new
 options.log_level              = INFO
 options.profile                = 'default'
 options.definitions_directory  = './autoscale'
-options.config                 = nil
 
 OptionParser.new do |o|
   o.on('-g', '--group GROUP_NAME', String, 'Autoscaling group name') do |g|
     options.group = g
-  end
-
-  o.on('-c', '--config [CONFIG_NAME]', String, 'Specify config name (exclude \'.yml\') within an autoscaling group (optional) ') do |c|
-    options.config = "#{c}.yml"
   end
 
   o.on('-l', '--log-level [LEVEL]', String, "Specify the log level (default is INFO)") do |l|

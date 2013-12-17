@@ -12,7 +12,6 @@ module Rivet
       end
 
       definition = Rivet::Utils.get_definition(
-        options.config,
         options.group,
         options.definitions_directory)
 

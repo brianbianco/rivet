@@ -3,9 +3,9 @@ require_relative './rivet_spec_setup'
 include SpecHelpers
 
 AUTOSCALE_DIR           = '.'
+AUTOSCALE_GROUPS_DIR    = File.join(AUTOSCALE_DIR, 'groups')
 GROUP_DEFINITION_NAME   = 'unit_test'
-CONFIG_DEFINITION_NAME  = 'unit_test_config'
-DEFINITION_DIR          = File.join(AUTOSCALE_DIR, GROUP_DEFINITION_NAME)
+DEFINITION_DIR          = File.join(AUTOSCALE_GROUPS_DIR, GROUP_DEFINITION_NAME)
 LAUNCH_CONFIG_PARAMS    = %w(ssh_key instance_size security_groups ami bootstrap)
 
 defaults_hash = {
@@ -34,6 +34,7 @@ describe "rivet utils" do
   tempdir_context "with an autoscaling directory" do
     before do
       FileUtils.mkdir_p AUTOSCALE_DIR
+      FileUtils.mkdir_p AUTOSCALE_GROUPS_DIR
     end
 
     describe "consume_defaults" do
@@ -44,13 +45,13 @@ describe "rivet utils" do
 
     describe "load_definition" do
       it "should return false" do
-        Rivet::Utils.load_definition('unit_test', AUTOSCALE_DIR).should be_false
+        Rivet::Utils.load_definition('unit_test', AUTOSCALE_GROUPS_DIR).should be_false
       end
     end
 
     describe "get_definition" do
       it "should return false" do
-        Rivet::Utils.get_definition(nil, 'unit_test', AUTOSCALE_DIR)
+        Rivet::Utils.get_definition('unit_test', AUTOSCALE_GROUPS_DIR)
       end
     end
 
@@ -61,7 +62,7 @@ describe "rivet utils" do
 
       describe "load_definition" do
         it "should return false" do
-          Rivet::Utils.load_definition('unit_test', AUTOSCALE_DIR).should be_false
+          Rivet::Utils.load_definition('unit_test', AUTOSCALE_GROUPS_DIR).should be_false
         end
       end
 
@@ -74,7 +75,7 @@ describe "rivet utils" do
         end
         describe "load_definition" do
           it "returns a hash" do
-            loaded_def = Rivet::Utils.load_definition('unit_test', AUTOSCALE_DIR)
+            loaded_def = Rivet::Utils.load_definition('unit_test', AUTOSCALE_GROUPS_DIR)
             unit_test_definition_hash.each_pair { |k,v| loaded_def.should include(k => v) }
           end
         end
@@ -94,49 +95,12 @@ describe "rivet utils" do
 
           describe "get_definition" do
             it "returns a merged hash" do
-             result = Rivet::Utils.get_definition(nil, GROUP_DEFINITION_NAME, AUTOSCALE_DIR)
+             result = Rivet::Utils.get_definition(GROUP_DEFINITION_NAME, AUTOSCALE_DIR)
              merged_hash = defaults_hash.merge(unit_test_definition_hash)
              result.should == defaults_hash.merge(unit_test_definition_hash)
             end
           end
 
-        end
-
-        context "and with an unit_test_config.yml'" do
-          before do
-            File.open(File.join(DEFINITION_DIR, "#{CONFIG_DEFINITION_NAME}.yml"), 'w') do |f|
-              f.write(unit_test_definition_hash.to_yaml)
-            end
-          end
-          describe "load_definition" do
-            it "returns a hash" do
-              loaded_def = Rivet::Utils.load_definition('unit_test', AUTOSCALE_DIR, 'unit_test_config.yml')
-              unit_test_definition_hash.each_pair { |k,v| loaded_def.should include(k => v) }
-            end
-          end
-          context "and with a defaults.yml" do
-            before do
-              File.open(File.join(AUTOSCALE_DIR, 'defaults.yml'), 'w') do |f|
-                f.write(defaults_hash.to_yaml)
-              end
-            end
-
-            describe "consume_defaults" do
-              it "consume defaults returns a hash" do
-                results = Rivet::Utils.consume_defaults(AUTOSCALE_DIR)
-                defaults_hash.each_pair { |k,v| results.should include(k => v) }
-              end
-            end
-
-            describe "get_definition" do
-              it "returns a merged hash" do
-                result = Rivet::Utils.get_definition(CONFIG_DEFINITION_NAME, GROUP_DEFINITION_NAME, AUTOSCALE_DIR)
-                merged_hash = defaults_hash.merge(unit_test_definition_hash)
-                result.should == defaults_hash.merge(unit_test_definition_hash)
-              end
-            end
-
-          end
         end
 
       end
