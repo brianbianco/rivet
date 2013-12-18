@@ -23,19 +23,17 @@ module Rivet
                         #      with :concat_array option
                         # If no common_defs
                         #   1) Deep merge group_def into defaults (if any)
-                        result =  if group_def['include'].respond_to? :empty
-                                    group_def['include'].inject({}) do |h, (filename_path, index)|
-                                      filename_path << '.yml' unless filename_path[-4..-1] == '.yml'
+                        result =  if group_def['include'].respond_to? :each
+                                    group_def['include'].each_with_index.inject({}) do |h, (filename_path, index)|
                                       common_def  = load_definition('common', directory, filename_path)
-                                      h = if index == 0
-                                            defaults ? deep_merge(defaults, common_def) : common_def
-                                          else
-                                            deep_merge(r, common_def)
-                                          end
+                                      if index == 0
+                                        defaults ? deep_merge(defaults, common_def) : common_def
+                                      else
+                                        deep_merge(h, common_def)
+                                      end
                                     end
                                   else
                                     filename_path = group_def['include']
-                                    filename_path << '.yml' unless filename_path[-4..-1] == '.yml'
                                     common_def  = load_definition('common', directory, filename_path)
 
                                     defaults ? deep_merge(defaults, common_def) : common_def
@@ -87,6 +85,7 @@ module Rivet
     # false if empty
 
     def self.load_definition(name, directory, config='conf.yml')
+      config = config.dup << '.yml' unless config[-4..-1] == '.yml'
       definition_dir = File.join(directory, name)
       conf_file      = File.join(definition_dir, config)
       if Dir.exists?(definition_dir) && File.exists?(conf_file)

@@ -57,7 +57,7 @@ Autoscaling group definition directories and files
 Example files can be found in the example/ directory in the rivet git repository
 
 Rivet will look in the directory specified on the command line (or ./autoscale by default) for some definitions. It expects
-a defaults.yml (optional) inside of it in whatever directory you use for your autoscaling definitions. It also expects
+a defaults.yml (optional) inside of it in whatever directory you use for your autoscaling definitions. Inside it, it expects
 a 'groups' subdir where autoscale groups will have a directory named inside for them with a conf.yml. Using a group's defintion
 attribute 'include', you may optionally include common defintion(s) from inside the 'common' subdir (./autoscale/common).
 If you only want to include a single defintion, this can be a string. Otherwise, you'll need to make a list of strings

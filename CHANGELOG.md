@@ -1,7 +1,7 @@
 Rivet CHANGELOG
 ===
 
-1.5.0 - Released 12/17/13
+1.5.0 - Released 12/18/13
 ---
   * BREAKING CHANGE: The gem list in bootstrap['gems'] must be converted from a list of
     Arrays to a Hash in yaml definition files, please look at README.md
@@ -11,7 +11,7 @@ Rivet CHANGELOG
     ./autoscale/common/<config name>.yml | ./autoscale/common/<folder name>/<config name>.yml
   * The functionality to apply common configs is optional and done so in order of the 'include' array,
     as it first checks 'include' in the group_def to see if it is including any common_defs. If it is,
-    it will deep merge defaults into the first common_def and then will deep merge subsquent common_defs,
+    it will deep merge first common_def into the defaults and then will deep merge subsquent common_defs,
     if any. Last, it will deep merge the result with the group_def and concat any arrays.
   * Improved Rivet's CLI option parser. It now uses OpenStruct instead of a Hash for the options,
     has cleaner user error messages with cmd help displayed and supports exit status codes
