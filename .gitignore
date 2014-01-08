@@ -26,3 +26,4 @@ autoscale/
 
 bin/*
 !bin/rivet
+!gem/*

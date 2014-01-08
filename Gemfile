@@ -7,4 +7,4 @@ group(:development, :test) do
   gem 'rspec', '~> 2.14.1'
 end
 
-gem 'aws-sdk',  '>= 1.11.1'
+gem 'aws-sdk',  '>= 1.30.0'

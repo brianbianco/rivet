@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require 'ostruct'
 require 'rivet'
 require 'rivet/client'
 
@@ -10,39 +11,50 @@ FATAL = Logger::FATAL
 INFO  = Logger::INFO
 
 # Default option values
-options = {
-  :log_level => INFO,
-  :profile => 'default',
-  :definitions_directory => './autoscale'
-}
+options                        = OpenStruct.new
+options.log_level              = INFO
+options.profile                = 'default'
+options.definitions_directory  = './autoscale'
 
 OptionParser.new do |o|
-  o.on('-g', '--group [GROUP_NAME]', String, 'Autoscaling group name') do |g|
-    options[:group] = g
+  o.on('-g', '--group GROUP_NAME', String, 'Autoscaling group name') do |g|
+    options.group = g
   end
 
-  o.on('-l', '--log-level [LEVEL]', String, "specify the log level (default is INFO)") do |l|
-    options[:log_level] = Kernel.const_get l.upcase
+  o.on('-l', '--log-level [LEVEL]', String, "Specify the log level (default is INFO)") do |l|
+    options.log_level = Kernel.const_get l.upcase
   end
-
 
   o.on('-p', '--profile [PROFILE_NAME]', "Selects the AWS profile to use (default is 'default')") do |p|
-    options[:profile] = p
+    options.profile = p
   end
 
   o.on('-s', '--sync', "Sync the changes remotely to AWS") do |s|
-    options[:sync] = s
+    options.sync = s
   end
 
   o.on('-d', '--definitions-directory [PATH]', "The autoscale definitions directory to use (default is ./autoscale)") do |d|
-    options[:definitions_directory] = d
+    options.definitions_directory = d
   end
 
   o.on('-h') { puts o; exit }
-  o.parse!
+
+  begin
+    o.parse!
+    required = %w(group)
+    missing = required.select{ |param| options.send(param).nil? }
+    unless missing.empty?
+      puts "Missing required options: #{missing.join(', ')}"
+      puts o
+      exit 255
+    end
+  rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+    puts $!.to_s
+    puts o
+    exit 255
+  end
+
+  puts "Rivet running with options: #{options.inspect}"
 end
 
-raise "--group [GROUP_NAME] argument is required!" if options[:group].nil?
-
-Rivet::Client.new.run(options)
-
+exit Rivet::Client.new.run(options)

@@ -56,25 +56,42 @@ Autoscaling group definition directories and files
 
 Example files can be found in the example/ directory in the rivet git repository
 
-Rivet will look in the directory specified on the command line (or ./autoscale by default) for some definitions.  It expects autoscale groups to have a directory named for them
-with a conf.yml inside of it as well as a defaults.yml in whatever directory you use for your autoscaling group definitions.
+Rivet will look in the directory specified on the command line (or ./autoscale by default) for some definitions. It expects
+a defaults.yml (optional) inside of it in whatever directory you use for your autoscaling definitions. Inside it, it expects
+a 'groups' subdir where autoscale groups will have a directory named inside for them with a conf.yml. Using a group's defintion
+attribute 'include', you may optionally include common defintion(s) from inside the 'common' subdir (./autoscale/common).
+If you only want to include a single defintion, this can be a string. Otherwise, you'll need to make a list of strings
+that point to the relative_filename_path, i.e. '<folder name>/<config name>(.yml)' or '<config name>(.yml)'. Adding the .yml extention is
+optional when referencing the relative_filename_path, the filename itself must have the .yml extention though. It will first deep merge
+in the defaults.yml (if any) and then deep merge in order of the array of 'include' for the common_defs (if any) and finally
+with the group's definition coming last and taking precedence.
 
 ```
 ./autoscale
   `- defaults.yml
-     `- <autoscale group name>
+    `- common
+      `- <config name>.yml
+    `- groups
+      `- <autoscale group name>
         `- conf.yml
 ```
 
-defaults.yml and conf.yml both accept all the same options.  A groups definition will be deep merged over the defaults.
+defaults.yml, conf.yml and <config name>.yml all accept all the same options, except that conf.yml accepts an 'include' option to
+include common defintion(s).  A group's definition will be deep merged over the defaults or results of the defaults and the
+common definitons. Any arrays in the defaults or common defintions will be replaced by the subsquent defintion, except for the
+group definition.  Instead, when at final deep merge of the group defintion, it will be concatenated (instead of replaced),
+duplicates in arrays will be removed (please don't rely on this, keep your configs clean) and the bootstrap['run_list'] array
+position ordering (if used) will take precedence, see below.
 
 The yaml file format:
 
 ```yaml
+include:
+  - COMMON_DEFINITION_PATH <string>
 min_size: SIZE <integer>
 max_size: SIZE <integer>
 region: AWS_REGION <string>
-availability_zones: [ZONE<string>,ZONE...]
+availability_zones: [ZONE<string>, ZONE...]
 iam_instance_profile: INSTANCE_PROFILE <string>
 tags:
   -
@@ -95,12 +112,18 @@ bootstrap:
   name: NAME <string>
   elastic_ip: AWS_ELASTIC_IP <string>
   gems:
-    - [GEM_NAME<string>,GEM_VERSION<string>]
-    - [GEM_NAME<string>]
+    GEM_NAME<string>: GEM_VERSION<string>
+    GEM_NAME<string>: ~
   run_list:
     - 'role[example]' <string>
+    - ['role[another_example_using_array_position]' <string>, ARRAY_POSITION <integer>]
 
 ```
+
+In the above example, under bootstrap['run_list'], if ARRAY_POSITION for 'role[another_example_using_array_position' was 0,
+it would come first, if ARRAY_POSITION was not used, it would come second as it respects the array's order by default.
+Please try to design definitions files to take advanage of the fact that they are arrays and inherently have an
+order whenever possible. In short, don't use this feature unless you really need it (keep configs SANE)!
 
 Availability zones should use the single character of the zone.  The region will be appended by rivet.
 
@@ -115,8 +138,8 @@ Usage
 
 ```
 Usage: rivet [options]
-    -g, --group [GROUP_NAME]         Autoscaling group name
-    -l, --log-level [LEVEL]          specify the log level (default is INFO)
+    -g, --group GROUP_NAME           Autoscaling group name
+    -l, --log-level [LEVEL]          Specify the log level (default is INFO)
     -p, --profile [PROFILE_NAME]     Selects the AWS profile to use (default is 'default')
     -s, --sync                       Sync the changes remotely to AWS
     -d [PATH],                       The autoscale definitions directory to use (default is ./autoscale)
@@ -141,4 +164,3 @@ sync the differences for the example_group using the foobar profile
 ```bash
 rivet -g example_group -p foobar -s
 ```
-
