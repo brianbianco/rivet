@@ -3,7 +3,7 @@ module Rivet
 
     def self.verify_security_groups(groups)
       return false if groups.nil?
-      Rivet::Log.info("Verifying security groups: #{groups.join(",")}")
+      Rivet::Log.info "Verifying security groups: #{groups.join(",")}"
 
       security_groups_collection = AWS::EC2.new.security_groups
       filtered_groups = []
@@ -13,7 +13,7 @@ module Rivet
 
       groups.each do |g|
         unless filtered_groups.include?(g)
-          Rivet::Log.debug("Creating security group #{g}")
+          Rivet::Log.debug "Creating security group #{g}"
           security_groups_collection.create g
         end
       end
@@ -54,7 +54,7 @@ module Rivet
     end
 
     def self.set_aws_credentials(profile)
-      Rivet::Log.info("Settings AWS credentials to #{profile} profile")
+      Rivet::Log.info "Settings AWS credentials to #{profile} profile"
       settings = config_parser
       aws_creds = nil
 

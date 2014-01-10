@@ -2,7 +2,6 @@
 
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require 'rivet'
-require 'rivet/client'
 
 DEBUG = Logger::DEBUG
 WARN  = Logger::WARN
@@ -10,39 +9,50 @@ FATAL = Logger::FATAL
 INFO  = Logger::INFO
 
 # Default option values
-options = {
-  :log_level => INFO,
-  :profile => 'default',
-  :definitions_directory => './autoscale'
-}
+options             = OpenStruct.new
+options.log_level   = INFO
+options.profile     = 'default'
+options.config_path = './autoscale'
 
 OptionParser.new do |o|
   o.on('-g', '--group [GROUP_NAME]', String, 'Autoscaling group name') do |g|
-    options[:group] = g
+    options.group = g
   end
 
   o.on('-l', '--log-level [LEVEL]', String, "specify the log level (default is INFO)") do |l|
-    options[:log_level] = Kernel.const_get l.upcase
+    options.log_level = Kernel.const_get l.upcase
   end
 
 
   o.on('-p', '--profile [PROFILE_NAME]', "Selects the AWS profile to use (default is 'default')") do |p|
-    options[:profile] = p
+    options.profile = p
   end
 
   o.on('-s', '--sync', "Sync the changes remotely to AWS") do |s|
-    options[:sync] = s
+    options.sync = s
   end
 
-  o.on('-d', '--definitions-directory [PATH]', "The autoscale definitions directory to use (default is ./autoscale)") do |d|
-    options[:definitions_directory] = d
+  o.on('-c', '--config-path [PATH]', "The configuration path to use (default is ./autoscale)") do |c|
+    options.config_path = c
   end
 
-  o.on('-h') { puts o; exit }
-  o.parse!
+  o.on('-h') { Rivet::Log.info o; exit }
+
+  begin
+    o.parse!
+    required = %w(group)
+    missing  = required.select { |param| options.send(param).nil? }
+    unless missing.empty?
+      Rivet::Log.fatal "Missing required options: #{missing.join(',')}"
+      Rivet::Log.fatal o
+      exit 255
+    end
+  rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+    Rivet::Log.fatal $!.to_s
+    Rivet::Log.fatal o
+    exit 255
+  end
 end
-
-raise "--group [GROUP_NAME] argument is required!" if options[:group].nil?
 
 Rivet::Client.new.run(options)
 

@@ -1,12 +1,31 @@
 module Rivet
   class OpenState
+    attr_reader :generated_attributes
+    attr_accessor :required_fields
+
+    def initialize
+      @generated_attributes = []
+    end
 
     def install_get_or_set(name)
+      @generated_attributes << name
       define_singleton_method(name) do |*args|
         if args.size < 1
           instance_variable_get("@#{name}")
         else
           instance_variable_set("@#{name}",args[0])
+        end
+      end
+    end
+
+    def validate
+      required_fields.each_pair do |method,default_value|
+        unless respond_to?(method)
+          if default_value.nil?
+            raise "Required field #{method} missing!"
+          else
+            send(method,default_value)
+          end
         end
       end
     end
@@ -23,21 +42,43 @@ module Rivet
 
   class Config < OpenState
     attr_reader :name
-    attr_accessor :bootstrap
+    attr_accessor :bootstrap,:required_fields
 
-    def self.from_file(path)
-      name = File.basename(path,".rb")
-      data = Proc.new { eval(File.read(path)) }
-      new(name,&data)
+    def self.from_file(dsl_file,load_path='.')
+      name = File.basename(dsl_file,".rb")
+      data = Proc.new { eval(File.read(dsl_file)) }
+      new(name,load_path,&data)
     end
 
-    def initialize(name,&block)
+    def initialize(name,load_path='.',&block)
+      super()
       @name = name
+      @path = load_path
       @bootstrap = OpenState.new
+      @required_fields = {
+        :min_size => nil,
+        :max_size => nil,
+        :availability_zones => nil,
+        :default_cooldown => 300,
+        :desired_capacity => 0,
+        :health_check_grace_period => 0,
+        :health_check_type => :ec2,
+        :load_balancers => [],
+        :subnets => [],
+        :termination_policies => ["Default"]
+      }
       instance_eval(&block) if block
     end
 
-    private
+    def path(*args)
+      if args.size < 1
+        @path
+      else
+        File.join(@path,*args)
+      end
+    end
+
+    protected
 
     def import(path)
       lambda { eval(File.read(path)) }.call

@@ -1,30 +1,36 @@
 module Rivet
   class LaunchConfig
 
-    LC_ATTRIBUTES = %w(key_name image_id instance_type security_groups iam_instance_profile bootstrap)
+    ATTRIBUTES = [
+      :bootstrap,
+      :iam_instance_profile,
+      :image_id,
+      :instance_type,
+      :key_name,
+      :security_groups
+    ].each { |a| attr_reader a }
 
-    LC_ATTRIBUTES.each do |a|
-      attr_reader a.to_sym
-    end
+    attr_reader :id_prefix, :config
 
-    attr_reader :id_prefix
-
-    def initialize(spec,id_prefix = 'rivet_')
+    def initialize(config,id_prefix = 'rivet_')
+      @config    = config
       @id_prefix = id_prefix
 
-      LC_ATTRIBUTES.each do |a|
-
+      ATTRIBUTES.each do |a|
         if respond_to? "normalize_#{a}".to_sym
-          spec[a] = self.send("normalize_#{a.to_sym}", spec[a])
+          normalized_results = self.send("normalize_#{a}", config.send(a))
+          config.send(a, normalized_results)
         end
 
-        Rivet::Log.debug("Setting LaunchConfig @#{a} to #{spec[a]}")
-        instance_variable_set("@#{a}", spec[a])
+        if config.respond_to?(a)
+          Rivet::Log.debug "Setting LaunchConfig @#{a} to #{config.send(a)}"
+          instance_variable_set("@#{a}", config.send(a))
+        end
       end
     end
 
     def user_data
-      @user_data ||= Bootstrap.new(bootstrap).user_data
+      @user_data ||= Bootstrap.new(@config).user_data
     end
 
     def identity
@@ -45,8 +51,8 @@ module Rivet
         options[:user_data]             = user_data             unless user_data.nil?
         options[:iam_instance_profile]  = iam_instance_profile  unless iam_instance_profile.nil?
 
-        Rivet::Log.info("Saving launch configuration #{identity} to AWS")
-        Rivet::Log.debug("Launch Config options:\n #{options.inspect}")
+        Rivet::Log.info "Saving launch configuration #{identity} to AWS"
+        Rivet::Log.debug "Launch Config options:\n #{options.inspect}"
         lc_collection.create(identity, image_id, instance_type, options)
       end
     end
@@ -54,9 +60,9 @@ module Rivet
     protected
 
     def build_identity_string
-      identity = LC_ATTRIBUTES.inject('') do |accum, attribute|
-        if attribute != 'bootstrap'
-          attr_value = self.send(attribute.to_sym) ? self.send(attribute.to_sym) : "\0"
+      identity = ATTRIBUTES.inject('') do |accum, attribute|
+        if attribute != :bootstrap
+          attr_value = self.send(attribute) ? self.send(attribute) : "\0"
           attr_value = attr_value.join("\t") if attr_value.respond_to? :join
           accum << attribute.to_s
           accum << Base64.encode64(attr_value)
@@ -66,7 +72,7 @@ module Rivet
         end
         accum
       end
-      Rivet::Log.debug("Pre SHA1 identity string is #{identity}")
+      Rivet::Log.debug "Pre SHA1 identity string is #{identity}"
       identity
     end
 

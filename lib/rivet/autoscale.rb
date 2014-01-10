@@ -1,35 +1,55 @@
 module Rivet
   class Autoscale
 
-    REQUIRED_FIELDS = [:min_size, :max_size, :launch_configuration, :availability_zones]
+    OPTIONS = [
+      :availability_zones,
+      :default_cooldown,
+      :desired_capacity,
+      :health_check_grace_period,
+      :health_check_type,
+      :launch_configuration,
+      :load_balancers,
+      :max_size,
+      :min_size,
+      :placement_group,
+      :subnets,
+      :tags,
+      :termination_policies
+    ].each { |a| attr_reader a }
 
-    attr_reader :min_size, :max_size, :name, :launch_configuration
-    attr_reader :availability_zones, :tags
+    REQUIRED_OPTIONS = [
+      :availability_zones,
+      :launch_configuration,
+      :max_size,
+      :min_size,
+    ]
 
-    def initialize(name, definition)
-      @name       = name
-      @min_size   = definition['min_size']
-      @max_size   = definition['max_size']
+    attr_reader :name
 
-      if definition.has_key? 'tags'
-        definition['tags'].each do |t|
+    def initialize(config)
+      @name       = config.name
+
+      OPTIONS.each do |o|
+        instance_variable_set("@#{o}",config.send(o)) if config.respond_to?(o)
+      end
+
+      if config.respond_to?(:tags)
+        config.tags.each do |t|
           unless t.has_key? 'propagate_at_launch'
             t['propagate_at_launch'] = true
           end
         end
-        @tags = definition['tags']
+        @tags = config.tags
       else
         @tags = []
       end
-      @launch_config = LaunchConfig.new(definition)
+      @launch_config = LaunchConfig.new(config)
 
       # Normalizing zones to match what the SDK expects, E.G. "<region><zone>"
-      @availability_zones = definition['availability_zones'].map! do |zone|
-        definition['region'] + zone
-      end
+      @availability_zones = config.availability_zones.map { |zone| "#{config.region}#{zone}" }
 
-      # The launch_configuration attr exists for convinence since that is what
-      # the aws SDK refers to the launch configuration name as for autoscaling
+      # The launch_configuration attr exists because that is what
+      # the aws SDK refers to the launch configuration name as.
       @launch_configuration = @launch_config.identity
     end
 
@@ -46,9 +66,7 @@ module Rivet
     end
 
     def show_differences(level = 'info')
-
-      Rivet::Log.write(level, "Remote and local defintions match") unless differences?
-
+      Rivet::Log.write(level, "Remote and local match") unless differences?
       differences.each_pair do |attr, values|
         Rivet::Log.write(level, "#{attr}:")
         Rivet::Log.write(level, "  remote: #{values['remote']}")
@@ -82,7 +100,7 @@ module Rivet
         options[attribute.to_sym] = values['local']
       end
 
-      REQUIRED_FIELDS.each do |field|
+      REQUIRED_OPTIONS.each do |field|
         unless options.has_key? field
           options[field] = self.send(field)
         end
@@ -93,15 +111,11 @@ module Rivet
     def get_differences
       remote = get_remote
       differences = {}
-      [:min_size, :max_size, :launch_configuration, :tags].each do |a|
+      OPTIONS.each do |a|
         if remote[a.to_s] != self.send(a)
           differences[a.to_s] = { 'remote' => remote[a.to_s], 'local' => self.send(a) }
         end
       end
-
-      if remote['availability_zones'] != availability_zones
-        differences['availability_zones'] = { 'remote' => remote['availability_zones'], 'local' => availability_zones }
-      end if remote.has_key? 'availability_zones'
 
       differences
     end
@@ -110,21 +124,14 @@ module Rivet
       autoscale = AWS::AutoScaling.new
       remote_group = autoscale.groups[@name]
       if remote_group.exists?
-
-        remote_hash = [:min_size, :max_size].inject({}) do |accum, attr|
-          accum[attr.to_s] = remote_group.send attr
+        remote_hash = OPTIONS.inject({}) do |accum, attr|
+          if respond_to?("normalize_#{attr}".to_sym)
+            accum[attr.to_s] = send("normalize_#{attr}".to_sym,remote_group)
+          else
+            accum[attr.to_s] = remote_group.send attr
+          end
           accum
         end
-
-        # {:resource_id=>"venus", :propagate_at_launch=>true, :value=>"Venus", :key=>"Name", :resource_type=>"auto-scaling-group"}
-        remote_hash['tags'] = remote_group.tags.to_a.inject([]) do |tags, current|
-          tags << normalize_tag(current)
-        end
-
-        remote_hash['launch_configuration'] = remote_group.launch_configuration_name
-
-        # Normalize their AWS::Core::Data::List to a sorted array
-        remote_hash['availability_zones'] = remote_group.availability_zone_names.to_a.sort
 
         remote_hash
       else
@@ -139,6 +146,34 @@ module Rivet
       else
         autoscale.groups.create(@name, options)
       end
+    end
+
+    protected
+
+    def normalize_launch_configuration(group)
+      group.launch_configuration_name
+    end
+
+    def normalize_load_balancers(group)
+      group.load_balancers.to_a.sort
+    end
+
+    def normalize_availability_zones(group)
+      group.availability_zone_names.to_a.sort
+    end
+
+    def normalize_tags(group)
+      group.tags.to_a.inject([]) do |normalized_tags,current|
+        normalized_tags << normalize_tag(current)
+      end
+    end
+
+    def normalize_subnets(group)
+      group.subnets.to_a.sort
+    end
+
+    def normalize_termination_policies(group)
+      group.termination_policies.to_a.sort
     end
 
     def normalize_tag(tag)

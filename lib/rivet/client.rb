@@ -1,35 +1,33 @@
 module Rivet
   class Client
-    def initialize
-    end
-
     def run(options)
-      AwsUtils.set_aws_credentials(options[:profile])
-      Rivet::Log.level(options[:log_level])
+      AwsUtils.set_aws_credentials(options.profile)
+      Rivet::Log.level(options.log_level)
 
-      unless Dir.exists?(options[:definitions_directory])
-        Rivet::Utils.die("The autoscale definitions directory doesn't exist")
+      unless Dir.exists?(options.config_path)
+        Rivet::Utils.die "The autoscale config path doesn't exist"
       end
 
-      group_def = Rivet::Utils.get_definition(
-        options[:group],
-        options[:definitions_directory])
+      # Get config object for autoscaling group
+      config = Rivet::Utils.get_config(
+        options.group,
+        options.config_path)
 
-      unless group_def
-        Rivet::Utils.die "The #{options[:group]} definition doesn't exist"
+      unless config
+        Rivet::Utils.die "The #{options.group} autoscale definition doesn't exist"
       end
 
-      Rivet::Log.info("Checking #{options[:group]} autoscaling definition")
-      autoscale_def = Rivet::Autoscale.new(options[:group], group_def)
-      autoscale_def.show_differences
+      config.validate
 
-      if options[:sync]
+      Rivet::Log.info "Checking #{options.group} autoscaling definition"
+      autoscale_group = Rivet::Autoscale.new(config)
+      autoscale_group.show_differences
+
+      if options.sync
         autoscale_def.sync
       else
-        Rivet::Log.info("use the -s [--sync] flag to sync changes")
+        Rivet::Log.info "use the -s [--sync] flag to sync changes"
       end
-
     end
-
   end
 end
