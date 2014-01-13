@@ -72,6 +72,7 @@ module Rivet
         Rivet::Log.write(level, "  remote: #{values['remote']}")
         Rivet::Log.write(level, "  local:  #{values['local']}")
       end
+     Rivet::Log.write('debug',@launch_config.user_data)
     end
 
     def sync

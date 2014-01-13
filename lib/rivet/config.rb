@@ -80,8 +80,8 @@ module Rivet
 
     protected
 
-    def import(path)
-      lambda { eval(File.read(path)) }.call
+    def import(import_path)
+      lambda { eval(File.read(import_path)) }.call
     end
 
   end

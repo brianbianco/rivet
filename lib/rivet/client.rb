@@ -24,7 +24,7 @@ module Rivet
       autoscale_group.show_differences
 
       if options.sync
-        autoscale_def.sync
+        autoscale_group.sync
       else
         Rivet::Log.info "use the -s [--sync] flag to sync changes"
       end

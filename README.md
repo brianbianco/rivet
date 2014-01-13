@@ -2,9 +2,9 @@
 
 Rivet
 =======
-Rivet enables you to describe autoscaling groups and their launch configurations as yaml.  You can then sync those changes to Amazon Web Services (AWS.)
+Rivet enables you to describe autoscaling groups and their launch configurations as configuration.  You can then sync those changes to Amazon Web Services (AWS.)
 
-You provide a template and it's options to render as user-data for your launch configurations to build a bootstrap script for chef, installed via gems.
+You provide a template and it's options to render as user-data for your launch configurations. 
 
 Rivet generates unique deterministic names for launch configurations and automatically assigns the proper launch configuration to your
 autoscaling group based upon it's generated identity.
@@ -119,8 +119,7 @@ Usage: rivet [options]
     -l, --log-level [LEVEL]          specify the log level (default is INFO)
     -p, --profile [PROFILE_NAME]     Selects the AWS profile to use (default is 'default')
     -s, --sync                       Sync the changes remotely to AWS
-    -d [PATH],                       The autoscale definitions directory to use (default is ./autoscale)
-        --definitions-directory
+    -c, --config-path [PATH]         The autoscale config path to use (default is ./autoscale)
     -h
 ```
 

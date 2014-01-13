@@ -43,7 +43,7 @@ module Rivet
       lc_collection = AWS::AutoScaling.new.launch_configurations
 
       if lc_collection[identity].exists?
-        Rivet::Log.info("Launch configuration #{identity} already exists in AWS")
+        Rivet::Log.info "Launch configuration #{identity} already exists in AWS"
       else
         options = {}
         options[:key_pair]              = key_name              unless key_name.nil?

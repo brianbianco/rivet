@@ -1,6 +1,13 @@
 Rivet CHANGELOG
 ===
 
+2.0.0 -
+---
+  * Completely rewrite of the configuration system to use a DSL instead of YAML
+  * Complete overhaul of how generating bootstrap data works.  A user now provides
+    any arbitrary options they please and a template to use.  Rivet will simply
+    render the template with the provided options.
+
 1.4.0 - Released 11/22/13
 ---
   * Adds functionality to apply an elastic_ip durning bootstrap
