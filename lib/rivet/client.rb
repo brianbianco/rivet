@@ -1,8 +1,8 @@
 module Rivet
   class Client
     def run(options)
-      AwsUtils.set_aws_credentials(options.profile)
-      Rivet::Log.level(options.log_level)
+      AwsUtils.set_aws_credentials options.profile
+      Rivet::Log.level options.log_level
 
       unless Dir.exists?(options.config_path)
         Rivet::Utils.die "The autoscale config path doesn't exist"
@@ -19,7 +19,11 @@ module Rivet
 
       config.validate
 
+      config = ConfigProxy.new(config)
+
       Rivet::Log.info "Checking #{options.group} autoscaling definition"
+
+      aws_group = Rivet::AwsAutoscaleWrapper.new(options.group)
       autoscale_group = Rivet::Autoscale.new(config)
       autoscale_group.show_differences
 

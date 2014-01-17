@@ -17,11 +17,6 @@ module Rivet
       @id_prefix = id_prefix
 
       ATTRIBUTES.each do |a|
-        if respond_to? "normalize_#{a}".to_sym
-          normalized_results = self.send("normalize_#{a}", config.send(a))
-          config.send(a, normalized_results)
-        end
-
         if config.respond_to?(a)
           Rivet::Log.debug "Setting LaunchConfig @#{a} to #{config.send(a)}"
           instance_variable_set("@#{a}", config.send(a))
@@ -78,10 +73,6 @@ module Rivet
 
     def generate_identity
       @id_prefix + Digest::SHA1.hexdigest(build_identity_string)
-    end
-
-    def normalize_security_groups(groups)
-      groups.nil? ? groups : groups.sort
     end
 
   end
