@@ -20,12 +20,15 @@ module Rivet
     attr_reader :name
 
     def initialize(name)
+      Rivet::Log.debug "Initializing AWS Autoscale Wrapper for #{name}"
       @name = name
       @group = AWS::AutoScaling.new.groups[@name]
+
       if @group.exists?
         OPTIONS.each do |o|
           normalize_method = "normalize_#{o}".to_sym
           if respond_to?(normalize_method)
+            Rivet::Log.debug "Calling #{normalize_method} in AWS autoscale wrapper"
             value = send(normalize_method)
           else
             value = @group.send(o)
@@ -35,8 +38,6 @@ module Rivet
       end
 
     end
-
-    protected
 
     def normalize_launch_configuration
       @group.launch_configuration_name
@@ -63,6 +64,8 @@ module Rivet
     def normalize_termination_policies
       @group.termination_policies.to_a.sort
     end
+
+    protected
 
     def normalize_tag(tag)
       normalized_tag = {}

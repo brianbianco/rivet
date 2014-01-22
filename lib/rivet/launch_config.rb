@@ -67,7 +67,6 @@ module Rivet
         end
         accum
       end
-      Rivet::Log.debug "Pre SHA1 identity string is #{identity}"
       identity
     end
 

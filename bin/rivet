@@ -12,7 +12,7 @@ INFO  = Logger::INFO
 options             = OpenStruct.new
 options.log_level   = INFO
 options.profile     = 'default'
-options.config_path = './autoscale'
+options.config_path = File.join('.','autoscale')
 
 OptionParser.new do |o|
   o.on('-g', '--group [GROUP_NAME]', String, 'Autoscaling group name') do |g|
