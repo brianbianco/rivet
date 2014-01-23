@@ -120,6 +120,14 @@ module Rivet
     end
 
     def create(options)
+
+      # When creating an autoscaling group passing empty arrays for subnets
+      # or some other fields can cause it to barf.  Remove them first.
+      options.delete_if { |k,v| v.respond_to?(:'empty?') && v.empty? }
+
+      Rivet::Log.debug "Creating Autoscaling group #{@name} with the following options"
+      Rivet::Log.debug options
+
       autoscale = AWS::AutoScaling.new
       if autoscale.groups[@name].exists?
         raise "Cannot create AutoScaling #{@name} group it already exists!"
