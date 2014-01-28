@@ -4,7 +4,7 @@ Rivet
 =======
 Rivet enables you to describe autoscaling groups and their launch configurations as configuration.  You can then sync those changes to Amazon Web Services (AWS.)
 
-You provide a template and it's options to render as user-data for your launch configurations. 
+You optionally provide a template and it's options to render as user-data for your launch configurations. 
 
 Rivet generates unique deterministic names for launch configurations and automatically assigns the proper launch configuration to your
 autoscaling group based upon it's generated identity.
@@ -56,59 +56,85 @@ Autoscaling group definition directories and files
 
 Example files can be found in the example/ directory in the rivet git repository
 
-Rivet will look in the directory specified on the command line (or ./autoscale by default) for some definitions.  It expects autoscale groups to have a directory named for them
-with a conf.yml inside of it as well as a defaults.yml in whatever directory you use for your autoscaling group definitions.
+Rivet will look in the directory specified on the command line (or ./autoscale by default) for configuration files.  It expects the configuration file name to match the name of the autoscaling group. 
 
 ```
 ./autoscale
-  `- defaults.yml
-     `- <autoscale group name>
-        `- conf.yml
+  `- group_name.rb
 ```
 
-defaults.yml and conf.yml both accept all the same options.  A groups definition will be deep merged over the defaults.
+Configuration DSL
+-------------------------
 
-The yaml file format:
+You can execute any arbitrary ruby you please inside of a rivet configuration.
 
-```yaml
-min_size: SIZE <integer>
-max_size: SIZE <integer>
-region: AWS_REGION <string>
-availability_zones: [ZONE<string>,ZONE...]
-iam_instance_profile: INSTANCE_PROFILE <string>
-tags:
-  -
-    key: KEY_NAME<string>
-    value: KEY_VALUE<string>
-  -
-    key: KEY_NAME<string>
-    value: KEY_VALUE<string>
+Rivets built in commands:
 
-bootstrap:
-  chef_command: CHEF_COMMAND <string>
-  chef_organization: CHEF_ORGANIZATION <string>
-  chef_username: CHEF_USERNAME <string>
-  template: TEMPLATE <string>
-  config_dir: CONFIGURATION_FILES_DIR <string>
-  environment: CHEF_ENVIRONMENT <string>
-  region: AWS_REGION <string>
-  name: NAME <string>
-  elastic_ip: AWS_ELASTIC_IP <string>
-  gems:
-    - [GEM_NAME<string>,GEM_VERSION<string>]
-    - [GEM_NAME<string>]
-  run_list:
-    - 'role[example]' <string>
+path()
+
+- A function that returns the configuration directory path.
+- optionally takes any number of strings as arguments and will return the configuration
+  path with those strings joined to it.
+
+import(PATH)
+
+- A function that allows you to import other rivet configuration files
+
+bootstrap
+
+- provide this with a template file and a set of variables.  The variables will
+be made available to the template file provided.  Rendered, and injected as EC2
+user-data.
+
+Rivet will only use the following attributes.
+
+```
+min_size INTEGER <required>
+max_size INTEGER <required>
+desired_capacity INTEGER <optional, default 0)
+region STRING <required>
+availability_zones ARRAY <required>
+default_cooldown INTEGER <optional, default 300)
+health_check_grace_period INTEGER <optional, default 0)
+health_check_type SYMBOL <optional, default :ec2)
+load_balancers ARRAY <optional, default nil)
+subnet ARRAY <optional, default nil)
+iam_instance_profile STRING <optional, default nil)
+tags ARRAY <optional, default nil)
 
 ```
 
-Availability zones should use the single character of the zone.  The region will be appended by rivet.
+Availability zones should use the single character of the zone ('a', 'b','c').  The region will be appended by rivet.
 
-The following files should exist in the configuration directory specified under the bootstrap -> config_dir key:
+Tags should be an Array of Hashes with the format:
+{  key: String,
+   value: String,
+   propogate_at_launch: True/False <optional, default True>'}
 
-* A template file (specified by the bootstrap -> template file name)
-* A validator pem (named by the bootstrap -> environment key as <environment>-validator.pem)
 
+Using the bootstrap functionality
+---------------------------------
+
+Rivet allows you to provide it with an ERB template as well as any number of variables to make
+available to that template.  This will be rendered as user-data for the launch configuration.
+
+The following attribute is required
+
+bootstrap.template <some_path_to_a_template>
+
+You may also provide any number of your own variables to use in the template
+
+```
+bootstrap.my_var "yellow"
+bootstrap.number_of_elves 4
+```
+
+Rivet will pass a binding to the template such that you can access these options
+without prepending bootstrap to them.
+
+For example
+
+`<%= my_var %>` in your template will render the string 'yellow'.
 
 Usage
 =====
