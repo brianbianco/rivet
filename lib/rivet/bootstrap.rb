@@ -18,6 +18,7 @@ module Rivet
         template = ERB.new(File.read(config.template))
         template.result(config.instance_eval { binding })
       else
+        Rivet::Log.debug "No template provided, Rendering empty user-data"
         ""
       end
     end
