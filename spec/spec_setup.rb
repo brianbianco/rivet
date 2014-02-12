@@ -19,10 +19,10 @@ module SpecHelpers
     :desired_capacity     => '1',
     :max_size             => '3',
     :region               => "'us-west-2'",
-    :availability_zones   => '%w(a b c)',
+    :availability_zones   => '%w(b c a)',
     :key_name             => "'UnitTests'",
     :instance_type        => "'m1.large'",
-    :security_groups      => '%w(unit_tests1 unit_tests2)',
+    :security_groups      => '%w(unit_test3 unit_tests1 unit_tests2)',
     :image_id             => "'ami-12345678'",
     :iam_instance_profile => "'unit_test_profile'",
     :bootstrap            => {
