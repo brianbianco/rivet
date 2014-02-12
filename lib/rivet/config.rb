@@ -1,7 +1,7 @@
 module Rivet
   class Config < OpenState
     attr_reader :name
-    attr_accessor :bootstrap,:required_fields
+    attr_accessor :bootstrap
 
     def self.from_file(dsl_file,load_path='.')
       name = File.basename(dsl_file,".rb")
