@@ -15,23 +15,29 @@ module SpecHelpers
 
 
   DSL_VALUES = {
-    :min_size                  => '1',
-    :desired_capacity          => '1',
-    :max_size                  => '3',
-    :region                    => "'us-west-2'",
-    :availability_zones        => '%w(b c a)',
-    :key_name                  => "'UnitTests'",
-    :instance_type             => "'m1.large'",
-    :security_groups           => '%w(unit_test3 unit_tests1 unit_tests2)',
-    :image_id                  => "'ami-12345678'",
-    :iam_instance_profile      => "'unit_test_profile'",
-    :default_cooldown          => '300',
-    :placement_group           => "'unit test placement group'",
-    :health_check_type         => ":ec2",
-    :termination_policies      => "%w(policy2 policy1)",
-    :load_balancers            => "%w(balancer2 balancer1)",
-    :health_check_grace_period => "100",
-    :bootstrap            => {
+    :min_size                     => '1',
+    :desired_capacity             => '1',
+    :max_size                     => '3',
+    :region                       => "'us-west-2'",
+    :availability_zones           => '%w(b c a)',
+    :key_name                     => "'UnitTests'",
+    :instance_type                => "'m1.large'",
+    :security_groups              => '%w(unit_test3 unit_tests1 unit_tests2)',
+    :image_id                     => "'ami-12345678'",
+    :iam_instance_profile         => "'unit_test_profile'",
+    :default_cooldown             => '300',
+    :placement_group              => "'unit test placement group'",
+    :health_check_type            => ":ec2",
+    :termination_policies         => "%w(policy2 policy1)",
+    :load_balancers               => "%w(balancer2 balancer1)",
+    :health_check_grace_period    => "100",
+    :associate_public_ip_address  => "true",
+    :detailed_instance_monitoring => "true",
+    :block_device_mappings        => "[{:device_name => '/dev/sda1', :virtual_name => 'ephemeral0'}]",
+    :kernel_id                    => "'aki-12345678'",
+    :ramdisk_id                   => "'ari-12345678'",
+    :spot_price                   => "'0.01'",
+    :bootstrap                    => {
       :template => "'#{TEMPLATE_FILE}'",
       :foo => "'bar'"
     }
@@ -52,7 +58,13 @@ module SpecHelpers
                               "image_id#{Base64.encode64(eval(DSL_VALUES[:image_id]))}"\
                               "instance_type#{Base64.encode64(eval(DSL_VALUES[:instance_type]))}"\
                               "key_name#{Base64.encode64(eval(DSL_VALUES[:key_name]))}"\
-                              "security_groups#{Base64.encode64(eval(DSL_VALUES[:security_groups]).join("\t"))}"
+                              "security_groups#{Base64.encode64(eval(DSL_VALUES[:security_groups]).join("\t"))}"\
+                              "associate_public_ip_address#{Base64.encode64(eval(DSL_VALUES[:associate_public_ip_address]).to_s)}"\
+                              "detailed_instance_monitoring#{Base64.encode64(eval(DSL_VALUES[:detailed_instance_monitoring]).to_s)}"\
+                              "block_device_mappings#{Base64.encode64(eval(DSL_VALUES[:block_device_mappings]).join("\t"))}"\
+                              "kernel_id#{Base64.encode64(eval(DSL_VALUES[:kernel_id]))}"\
+                              "ramdisk_id#{Base64.encode64(eval(DSL_VALUES[:ramdisk_id]))}"\
+                              "spot_price#{Base64.encode64(eval(DSL_VALUES[:spot_price]))}"
 
   def tempdir_context(name, &block)
     context name do
