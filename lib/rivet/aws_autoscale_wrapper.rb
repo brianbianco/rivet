@@ -44,7 +44,7 @@ module Rivet
     end
 
     def normalize_load_balancers
-      @group.load_balancers.to_a.sort
+      @group.load_balancer_names.to_a.sort
     end
 
     def normalize_availability_zones
