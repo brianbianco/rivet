@@ -15,16 +15,22 @@ module SpecHelpers
 
 
   DSL_VALUES = {
-    :min_size             => '1',
-    :desired_capacity     => '1',
-    :max_size             => '3',
-    :region               => "'us-west-2'",
-    :availability_zones   => '%w(b c a)',
-    :key_name             => "'UnitTests'",
-    :instance_type        => "'m1.large'",
-    :security_groups      => '%w(unit_test3 unit_tests1 unit_tests2)',
-    :image_id             => "'ami-12345678'",
-    :iam_instance_profile => "'unit_test_profile'",
+    :min_size                  => '1',
+    :desired_capacity          => '1',
+    :max_size                  => '3',
+    :region                    => "'us-west-2'",
+    :availability_zones        => '%w(b c a)',
+    :key_name                  => "'UnitTests'",
+    :instance_type             => "'m1.large'",
+    :security_groups           => '%w(unit_test3 unit_tests1 unit_tests2)',
+    :image_id                  => "'ami-12345678'",
+    :iam_instance_profile      => "'unit_test_profile'",
+    :default_cooldown          => '300',
+    :placement_group           => "'unit test placement group'",
+    :health_check_type         => ":ec2",
+    :termination_policies      => "%w(policy2 policy1)",
+    :load_balancers            => "%w(balancer2 balancer1)",
+    :health_check_grace_period => "100",
     :bootstrap            => {
       :template => "'#{TEMPLATE_FILE}'",
       :foo => "'bar'"
