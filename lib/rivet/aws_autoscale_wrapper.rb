@@ -58,7 +58,7 @@ module Rivet
     end
 
     def normalize_subnets
-      @group.subnets.to_a.sort
+      @group.subnets.map(&:id).sort
     end
 
     def normalize_termination_policies
