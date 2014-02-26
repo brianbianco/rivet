@@ -12,12 +12,17 @@ describe "rivet aws autoscale wrapper" do
         {:propagate_at_launch => true, :key => 'Name', :value => 'Unit Test'},
         {:propagate_at_launch => false, :key => 'Sandwich', :value => 'Ham'}
       ],
-      :subnets              => %w(192.168.0.0 192.168.1.0),
+      :subnets              => %w(subnet-0000000a subnet-0000000b),
       :termination_policies => %w(policy1 policy2)
     }
   end
 
   let(:aws_mock) do
+    subnet_mock1 = double('Aws EC2 subnet')
+    subnet_mock1.stub(:id).and_return('subnet-0000000b')
+    subnet_mock2 = double('Aws EC2 subnet')
+    subnet_mock2.stub(:id).and_return('subnet-0000000a')
+
     mock = double('Aws Autoscaling Group')
     mock.stub(:health_check_type).and_return(:ec2)
     mock.stub(:desired_capacity).and_return(1)
@@ -26,7 +31,7 @@ describe "rivet aws autoscale wrapper" do
     mock.stub(:launch_configuration_name).and_return('unit_test_lc')
     mock.stub(:load_balancer_names).and_return(%w(balancer2 balancer1))
     mock.stub(:availability_zone_names).and_return(%w(unit-test-1b unit-test-1a))
-    mock.stub(:subnets).and_return(%w(192.168.1.0 192.168.0.0))
+    mock.stub(:subnets).and_return([subnet_mock1, subnet_mock2])
     mock.stub(:termination_policies).and_return(%w(policy2 policy1))
     mock.stub(:default_cooldown).and_return(100)
     mock.stub(:health_check_grace_period).and_return(300)
@@ -86,7 +91,7 @@ describe "rivet aws autoscale wrapper" do
 
   describe "#normalize_subnets" do
     it "returns a normalized array of subnets" do
-      wrapper.normalize_subnets.should == %w(192.168.0.0 192.168.1.0)
+      wrapper.normalize_subnets.should == %w(subnet-0000000a subnet-0000000b)
     end
   end
 

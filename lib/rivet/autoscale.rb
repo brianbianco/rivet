@@ -21,7 +21,7 @@ module Rivet
       :availability_zones,
       :launch_configuration,
       :max_size,
-      :min_size,
+      :min_size
     ]
 
     attr_reader :name
@@ -81,7 +81,6 @@ module Rivet
         if differences.has_key? :tags
           group.delete_all_tags
         end
-
         group.update(options)
 
       else
@@ -107,8 +106,10 @@ module Rivet
 
     def get_update_options
       options = {}
-      differences.each_pair do |attribute, values|
-        options[attribute] = values[:local]
+
+      OPTIONS.each do |field|
+        local_value = self.send(field)
+        options[field] = local_value unless local_value.nil?
       end
 
       REQUIRED_OPTIONS.each do |field|

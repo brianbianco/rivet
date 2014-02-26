@@ -23,7 +23,6 @@ module Rivet
         :health_check_grace_period => 0,
         :health_check_type => :ec2,
         :load_balancers => [],
-        :subnets => [],
         :tags => [],
         :termination_policies => ["Default"]
       }

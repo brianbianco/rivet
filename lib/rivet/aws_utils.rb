@@ -2,7 +2,7 @@ module Rivet
   module AwsUtils
 
     def self.verify_security_groups(groups)
-      return false if groups.nil?
+      return false if groups.nil? || groups.all?{|g| g.match(/\Asg-[0-9a-f]{8}\z/) }
       Rivet::Log.info "Verifying security groups: #{groups.join(",")}"
 
       security_groups_collection = AWS::EC2.new.security_groups
