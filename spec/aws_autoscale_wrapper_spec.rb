@@ -10,8 +10,8 @@ describe 'rivet aws autoscale wrapper' do
       :load_balancers       => %w(balancer1 balancer2),
       :availability_zones   => %w(unit-test-1a unit-test-1b),
       :tags                 => [
-        {:propagate_at_launch => true, :key => 'Name', :value => 'Unit Test'},
-        {:propagate_at_launch => false, :key => 'Sandwich', :value => 'Ham'}
+        { :propagate_at_launch => true, :key => 'Name', :value => 'Unit Test' },
+        { :propagate_at_launch => false, :key => 'Sandwich', :value => 'Ham' }
       ],
       :subnets              => %w(subnet-0000000a subnet-0000000b),
       :termination_policies => %w(policy1 policy2)
@@ -39,8 +39,8 @@ describe 'rivet aws autoscale wrapper' do
     mock.stub(:placement_group).and_return('donkey')
     mock.stub(:name).and_return('unit_test_scaling_group')
     mock.stub(:tags).and_return([
-      {:resource_id => 'snickers', :propagate_at_launch => true, :key => 'Name', :value => 'Unit Test'},
-      {:resource_type => 'yogurt', :propagate_at_launch => false, :key => 'Sandwich', :value => 'Ham'}
+      { :resource_id => 'snickers', :propagate_at_launch => true, :key => 'Name', :value => 'Unit Test' },
+      { :resource_type => 'yogurt', :propagate_at_launch => false, :key => 'Sandwich', :value => 'Ham' }
     ])
     mock.stub(:exists?).and_return(true)
     mock
@@ -84,8 +84,8 @@ describe 'rivet aws autoscale wrapper' do
 
   describe '#normalize_tags' do
     it 'returns a normalized array of tags' do
-      tags = [{:propagate_at_launch => true, :key => 'Name', :value => 'Unit Test'},
-              {:propagate_at_launch => false, :key => 'Sandwich', :value => 'Ham'}]
+      tags = [{ :propagate_at_launch => true, :key => 'Name', :value => 'Unit Test' },
+              { :propagate_at_launch => false, :key => 'Sandwich', :value => 'Ham' }]
       wrapper.normalize_tags.should == tags
     end
   end
@@ -104,8 +104,8 @@ describe 'rivet aws autoscale wrapper' do
 
   describe '#normalize_tag' do
     it 'returns a normalized tag' do
-      tag = {:resource_id => 'yoda', :resource_type => 'chewie',
-             :propagate_at_launch => true, :key => 'place', :value => 'alderaan' }
+      tag = { :resource_id => 'yoda', :resource_type => 'chewie',
+              :propagate_at_launch => true, :key => 'place', :value => 'alderaan' }
 
       normalized_tag = { :propagate_at_launch => true, :key => 'place', :value => 'alderaan' }
 

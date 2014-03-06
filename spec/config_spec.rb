@@ -96,7 +96,7 @@ describe 'rivet config' do
       it 'should return a normalized array of hashes' do
         expected_result = [
           { propagate_at_launch: true, key: 'Name', value: 'unit test' },
-          { propagate_at_launch: false, key: 'Other', value: 'sasquatch'}
+          { propagate_at_launch: false, key: 'Other', value: 'sasquatch' }
         ]
         default_config.normalize_tags.should == expected_result
       end

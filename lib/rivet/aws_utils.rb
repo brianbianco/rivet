@@ -47,7 +47,7 @@ module Rivet
             end
 
             value = results[2]
-            aws_config[current_profile].merge!({ option => value})
+            aws_config[current_profile].merge!({ option => value })
           end
 
           end

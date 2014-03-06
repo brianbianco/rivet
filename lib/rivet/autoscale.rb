@@ -93,7 +93,7 @@ module Rivet
     protected
 
     def get_differences
-      differences = { }
+      differences = {}
 
       OPTIONS.each do |o|
         remote_value = @remote_group.send(o)
