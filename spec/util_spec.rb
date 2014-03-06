@@ -31,5 +31,3 @@ describe 'rivet utils' do
 
   end
 end
-
-

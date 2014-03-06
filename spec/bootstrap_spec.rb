@@ -35,5 +35,3 @@ describe 'rivet bootstrap' do
     end
   end
 end
-
-
