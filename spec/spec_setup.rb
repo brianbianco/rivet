@@ -100,10 +100,10 @@ module SpecHelpers
     mock
   end
 
-  def is_valid_config(config, dsl_values)
+  def valid_config?(config, dsl_values)
     dsl_values.each_pair do |k, v|
       if v.respond_to? :each_pair
-        is_valid_config(config.send(k), v)
+        valid_config?(config.send(k), v)
       else
         config.send(k).should == eval(v)
       end

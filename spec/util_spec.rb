@@ -25,7 +25,7 @@ describe 'rivet utils' do
       describe '#get_config' do
         it 'should return a valid configuration' do
           config = Rivet::Utils.get_config('unit_test', AUTOSCALE_DIR)
-          is_valid_config(config, DSL_VALUES)
+          valid_config?(config, DSL_VALUES)
         end
       end
     end
