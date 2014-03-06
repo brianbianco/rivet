@@ -48,7 +48,7 @@ module SpecHelpers
         a << "bootstrap.#{bootstrap_attr} #{bootstrap_value}\n"
       end
     else
-      a << "#{k} #{v}\n";
+      a << "#{k} #{v}\n"
     end
     a
   end
