@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Rivet
   class OpenState
     attr_reader :generated_attributes

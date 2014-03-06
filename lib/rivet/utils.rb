@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Rivet
   module Utils
     def self.die(level = 'fatal', message)

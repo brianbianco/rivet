@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Rivet
   class Config < OpenState
     attr_reader :name
