@@ -35,7 +35,7 @@ module Rivet
           else
             value = @group.send(o)
           end
-          instance_variable_set("@#{o}",value)
+          instance_variable_set("@#{o}", value)
         end
       end
 
@@ -54,7 +54,7 @@ module Rivet
     end
 
     def normalize_tags
-      @group.tags.to_a.inject([]) do |normalized_tags,current|
+      @group.tags.to_a.inject([]) do |normalized_tags, current|
         normalized_tags << normalize_tag(current)
       end
     end

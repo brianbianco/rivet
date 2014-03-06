@@ -8,8 +8,8 @@ module Rivet
     end
 
     def self.get_config(name, directory)
-      dsl_file = File.join(directory,"#{name}.rb")
-      Rivet::Config.from_file(dsl_file,directory) if File.exists?(dsl_file)
+      dsl_file = File.join(directory, "#{name}.rb")
+      Rivet::Config.from_file(dsl_file, directory) if File.exists?(dsl_file)
     end
   end
 end

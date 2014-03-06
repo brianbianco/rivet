@@ -108,13 +108,13 @@ describe 'rivet aws autoscale wrapper' do
 
       normalized_tag = { :propagate_at_launch => true, :key => 'place', :value => 'alderaan' }
 
-      wrapper.send(:normalize_tag,tag).should == normalized_tag
+      wrapper.send(:normalize_tag, tag).should == normalized_tag
     end
   end
 
   describe '#new' do
     it 'should normalize values if normalize methods exist' do
-      normalized_values.each_pair do |attr,value|
+      normalized_values.each_pair do |attr, value|
         wrapper.send(attr).should == value
       end
     end

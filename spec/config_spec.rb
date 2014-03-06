@@ -118,7 +118,7 @@ describe 'rivet config' do
 
     describe 'generated attributes' do
       it 'should contain all the attributes defined in the DSL CONTENT' do
-        DSL_VALUES.each_pair do |k,v|
+        DSL_VALUES.each_pair do |k, v|
           # bootstrap is an attribute of the Config class, not a generated one
           unless k == :bootstrap
             config.generated_attributes.should include(k)
@@ -127,12 +127,12 @@ describe 'rivet config' do
       end
 
       it 'should have all values properly set according to the DSL CONTENT' do
-        DSL_VALUES.each_pair do |k,v|
+        DSL_VALUES.each_pair do |k, v|
           unless k == :bootstrap
             config.send(k).should == eval(v)
           end
         end
-        DSL_VALUES[:bootstrap].each_pair do |k,v|
+        DSL_VALUES[:bootstrap].each_pair do |k, v|
           config.bootstrap.send(k).should == eval(v)
         end
       end
@@ -140,7 +140,7 @@ describe 'rivet config' do
   end
 
   tempdir_context 'with DSL content inside of a file on disk' do
-    let(:config_from_file) { Rivet::Config.from_file(File.join('.','unit_test.rb')) }
+    let(:config_from_file) { Rivet::Config.from_file(File.join('.', 'unit_test.rb')) }
 
     before do
       File.open('unit_test.rb', 'w') { |f| f.write(DSL_CONFIG_CONTENT) }
@@ -152,12 +152,12 @@ describe 'rivet config' do
       end
 
       it 'should have all values properly set according to the DSL CONTENT' do
-        DSL_VALUES.each_pair do |k,v|
+        DSL_VALUES.each_pair do |k, v|
           unless k == :bootstrap
             config_from_file.send(k).should == eval(v)
           end
         end
-        DSL_VALUES[:bootstrap].each_pair do |k,v|
+        DSL_VALUES[:bootstrap].each_pair do |k, v|
           config_from_file.bootstrap.send(k).should == eval(v)
         end
       end

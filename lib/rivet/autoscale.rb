@@ -35,7 +35,7 @@ module Rivet
 
       OPTIONS.each do |o|
         if config.respond_to?(o)
-          instance_variable_set("@#{o}",config.send(o))
+          instance_variable_set("@#{o}", config.send(o))
         end
       end
 
@@ -63,7 +63,7 @@ module Rivet
         Rivet::Log.write(level, "  remote: #{values[:remote]}")
         Rivet::Log.write(level, "  local:  #{values[:local]}")
       end
-     Rivet::Log.write('debug',@launch_config.user_data)
+     Rivet::Log.write('debug', @launch_config.user_data)
     end
 
     def sync
@@ -126,7 +126,7 @@ module Rivet
 
       # When creating an autoscaling group passing empty arrays for subnets
       # or some other fields can cause it to barf.  Remove them first.
-      options.delete_if { |k,v| v.respond_to?(:'empty?') && v.empty? }
+      options.delete_if { |k, v| v.respond_to?(:'empty?') && v.empty? }
 
       Rivet::Log.debug "Creating Autoscaling group #{@name} with the following options"
       Rivet::Log.debug options

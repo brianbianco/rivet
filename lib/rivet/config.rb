@@ -5,13 +5,13 @@ module Rivet
     attr_reader :name
     attr_accessor :bootstrap
 
-    def self.from_file(dsl_file,load_path='.')
-      name = File.basename(dsl_file,'.rb')
+    def self.from_file(dsl_file, load_path='.')
+      name = File.basename(dsl_file, '.rb')
       data = Proc.new { eval(File.read(dsl_file)) }
-      new(name,load_path,&data)
+      new(name, load_path, &data)
     end
 
-    def initialize(name,load_path='.',&block)
+    def initialize(name, load_path='.', &block)
       super()
       @name = name
       @path = load_path
@@ -35,7 +35,7 @@ module Rivet
       if args.size < 1
         @path
       else
-        File.join(@path,*args)
+        File.join(@path, *args)
       end
     end
 

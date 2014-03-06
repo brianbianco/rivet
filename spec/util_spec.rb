@@ -11,20 +11,20 @@ describe 'rivet utils' do
     context 'without an existing configuration' do
       describe '#get_config' do
         it 'should return false' do
-          Rivet::Utils.get_config('unit_test',AUTOSCALE_DIR).should be_false
+          Rivet::Utils.get_config('unit_test', AUTOSCALE_DIR).should be_false
         end
       end
     end
 
     context 'with a configuration file' do
       before do
-        File.open(CONFIG_FILE,'w') { |f| f.write(DSL_CONFIG_CONTENT) }
+        File.open(CONFIG_FILE, 'w') { |f| f.write(DSL_CONFIG_CONTENT) }
       end
 
       describe '#get_config' do
         it 'should return a valid configuration' do
-          config = Rivet::Utils.get_config('unit_test',AUTOSCALE_DIR)
-          is_valid_config(config,DSL_VALUES)
+          config = Rivet::Utils.get_config('unit_test', AUTOSCALE_DIR)
+          is_valid_config(config, DSL_VALUES)
         end
       end
     end

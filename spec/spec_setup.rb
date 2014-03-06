@@ -8,11 +8,10 @@ require_relative '../lib/rivet'
 Rivet::Log.level(Logger::FATAL)
 
 module SpecHelpers
-  AUTOSCALE_DIR      = File.join('.','autoscale')
-  CONFIG_FILE        = File.join(AUTOSCALE_DIR,'unit_test.rb')
-  TEMPLATE_FILE      = File.join(AUTOSCALE_DIR,'default.erb')
+  AUTOSCALE_DIR      = File.join('.', 'autoscale')
+  CONFIG_FILE        = File.join(AUTOSCALE_DIR, 'unit_test.rb')
+  TEMPLATE_FILE      = File.join(AUTOSCALE_DIR, 'default.erb')
   BOOTSTRAP_TEMPLATE = '<%= "bar" %>'\
-
 
   DSL_VALUES = {
     :min_size                     => '1',
@@ -42,9 +41,9 @@ module SpecHelpers
       :foo => "'bar'"
     }
   }
-  DSL_CONFIG_CONTENT = DSL_VALUES.inject(String.new) do |a,(k,v)|
+  DSL_CONFIG_CONTENT = DSL_VALUES.inject(String.new) do |a, (k, v)|
     if k == :bootstrap
-      v.each_pair do |bootstrap_attr,bootstrap_value|
+      v.each_pair do |bootstrap_attr, bootstrap_value|
         a << "bootstrap.#{bootstrap_attr} #{bootstrap_value}\n"
       end
     else
@@ -88,10 +87,10 @@ module SpecHelpers
 
   end
 
-  def generate_config_mock(mock,attrs)
-    attrs.each_pair do |a,v|
+  def generate_config_mock(mock, attrs)
+    attrs.each_pair do |a, v|
       if v.respond_to? :each_pair
-        sub_mock = generate_config_mock(double("#{a} mock"),v)
+        sub_mock = generate_config_mock(double("#{a} mock"), v)
         mock.stub(a).and_return(sub_mock)
       else
         mock.stub(a).and_return(eval(v))
@@ -100,10 +99,10 @@ module SpecHelpers
     mock
   end
 
-  def is_valid_config(config,dsl_values)
-    dsl_values.each_pair do |k,v|
+  def is_valid_config(config, dsl_values)
+    dsl_values.each_pair do |k, v|
       if v.respond_to? :each_pair
-        is_valid_config(config.send(k),v)
+        is_valid_config(config.send(k), v)
       else
         config.send(k).should == eval(v)
       end

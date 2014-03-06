@@ -15,29 +15,29 @@ module Rivet
         if args.size < 1
           instance_variable_get("@#{name}")
         else
-          instance_variable_set("@#{name}",args[0])
+          instance_variable_set("@#{name}", args[0])
         end
       end
     end
 
     def validate
-      required_fields.each_pair do |method,default_value|
+      required_fields.each_pair do |method, default_value|
         unless respond_to?(method)
           if default_value.nil?
             raise "Required field #{method} missing!"
           else
-            send(method,default_value)
+            send(method, default_value)
           end
         end
       end
     end
 
-    def method_missing(m,*args,&block)
+    def method_missing(m, *args, &block)
       if args.size < 1
         super
       else
         install_get_or_set(m)
-        send(m,args[0])
+        send(m, args[0])
       end
     end
   end

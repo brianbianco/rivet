@@ -20,7 +20,7 @@ module Rivet
 
     attr_reader :id_prefix, :config
 
-    def initialize(config,id_prefix = 'rivet_')
+    def initialize(config, id_prefix = 'rivet_')
       @config    = config
       @id_prefix = id_prefix
 

@@ -7,7 +7,7 @@ module Rivet
       @config = config
     end
 
-    def send(m,*args)
+    def send(m, *args)
       if @config.respond_to?("normalize_#{m}".to_sym)
         @config.send("normalize_#{m}".to_sym)
       else
