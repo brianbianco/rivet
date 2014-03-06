@@ -4,8 +4,8 @@ require_relative './spec_setup'
 include SpecHelpers
 
 describe 'rivet launch config' do
-  let (:config) { generate_config_mock(double('config_mock'), DSL_VALUES) }
-  let (:launch_config) { Rivet::LaunchConfig.new(config) }
+  let(:config) { generate_config_mock(double('config_mock'), DSL_VALUES) }
+  let(:launch_config) { Rivet::LaunchConfig.new(config) }
 
   context 'with a sane config' do
     before do
