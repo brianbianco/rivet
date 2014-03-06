@@ -133,7 +133,7 @@ module Rivet
 
       autoscale = AWS::AutoScaling.new
       if autoscale.groups[@name].exists?
-        raise "Cannot create AutoScaling #{@name} group it already exists!"
+        fail "Cannot create AutoScaling #{@name} group it already exists!"
       else
         autoscale.groups.create(@name, options)
       end

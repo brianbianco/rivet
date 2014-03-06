@@ -24,7 +24,7 @@ module Rivet
       required_fields.each_pair do |method, default_value|
         unless respond_to?(method)
           if default_value.nil?
-            raise "Required field #{method} missing!"
+            fail "Required field #{method} missing!"
           else
             send(method, default_value)
           end
