@@ -8,9 +8,9 @@ require_relative '../lib/rivet'
 Rivet::Log.level(Logger::FATAL)
 
 module SpecHelpers
-  AUTOSCALE_DIR      = File.join(".","autoscale")
-  CONFIG_FILE        = File.join(AUTOSCALE_DIR,"unit_test.rb")
-  TEMPLATE_FILE      = File.join(AUTOSCALE_DIR,"default.erb")
+  AUTOSCALE_DIR      = File.join('.','autoscale')
+  CONFIG_FILE        = File.join(AUTOSCALE_DIR,'unit_test.rb')
+  TEMPLATE_FILE      = File.join(AUTOSCALE_DIR,'default.erb')
   BOOTSTRAP_TEMPLATE = '<%= "bar" %>'\
 
 
@@ -27,12 +27,12 @@ module SpecHelpers
     :iam_instance_profile         => "'unit_test_profile'",
     :default_cooldown             => '300',
     :placement_group              => "'unit test placement group'",
-    :health_check_type            => ":ec2",
-    :termination_policies         => "%w(policy2 policy1)",
-    :load_balancers               => "%w(balancer2 balancer1)",
-    :health_check_grace_period    => "100",
-    :associate_public_ip_address  => "true",
-    :detailed_instance_monitoring => "true",
+    :health_check_type            => ':ec2',
+    :termination_policies         => '%w(policy2 policy1)',
+    :load_balancers               => '%w(balancer2 balancer1)',
+    :health_check_grace_period    => '100',
+    :associate_public_ip_address  => 'true',
+    :detailed_instance_monitoring => 'true',
     :block_device_mappings        => "[{:device_name => '/dev/sda1', :virtual_name => 'ephemeral0'}]",
     :kernel_id                    => "'aki-12345678'",
     :ramdisk_id                   => "'ari-12345678'",

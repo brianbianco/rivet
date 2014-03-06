@@ -9,7 +9,7 @@ module Rivet
       Rivet::Log.info "Using autoscale config path #{options.config_path}"
 
       unless Dir.exists?(options.config_path)
-        Rivet::Utils.die "The autoscale config path doesn't exist"
+        Rivet::Utils.die 'The autoscale config path does not exist'
       end
 
       # Get config object for autoscaling group
@@ -33,7 +33,7 @@ module Rivet
       if options.sync
         autoscale_group.sync
       else
-        Rivet::Log.info "use the -s [--sync] flag to sync changes"
+        Rivet::Log.info 'use the -s [--sync] flag to sync changes'
       end
     end
   end

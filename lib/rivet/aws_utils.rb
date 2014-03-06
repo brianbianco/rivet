@@ -29,7 +29,7 @@ module Rivet
         option_matcher  = /(\w.*)=(\S.*)\s*/
         aws_config      = {}
 
-        File.open(ENV['AWS_CONFIG_FILE'],"r").each_line do |line|
+        File.open(ENV['AWS_CONFIG_FILE'],'r').each_line do |line|
 
           if line =~ profile_matcher
             current_profile = line.match(profile_matcher)[2]
@@ -41,7 +41,7 @@ module Rivet
 
             # Normalize the option name so it can be used with the AWS SDK
             if results[1] =~ /^\S*aws_/
-              option = results[1].gsub("aws_",'').to_sym
+              option = results[1].gsub('aws_','').to_sym
             else
               option = results[1].to_sym
             end

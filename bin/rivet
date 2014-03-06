@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'rivet'
 
 DEBUG = Logger::DEBUG
@@ -19,20 +19,20 @@ OptionParser.new do |o|
     options.group = g
   end
 
-  o.on('-l', '--log-level [LEVEL]', String, "specify the log level (default is INFO)") do |l|
+  o.on('-l', '--log-level [LEVEL]', String, 'specify the log level (default is INFO)') do |l|
     options.log_level = Kernel.const_get l.upcase
   end
 
 
-  o.on('-p', '--profile [PROFILE_NAME]', "Selects the AWS profile to use (default is 'default')") do |p|
+  o.on('-p', '--profile [PROFILE_NAME]', 'Selects the AWS profile to use (default is "default")') do |p|
     options.profile = p
   end
 
-  o.on('-s', '--sync', "Sync the changes remotely to AWS") do |s|
+  o.on('-s', '--sync', 'Sync the changes remotely to AWS') do |s|
     options.sync = s
   end
 
-  o.on('-c', '--config-path [PATH]', "The configuration path to use (default is ./autoscale)") do |c|
+  o.on('-c', '--config-path [PATH]', 'The configuration path to use (default is ./autoscale)') do |c|
     options.config_path = c
   end
 

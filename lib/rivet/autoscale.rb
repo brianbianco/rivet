@@ -57,7 +57,7 @@ module Rivet
     end
 
     def show_differences(level = 'info')
-      Rivet::Log.write(level, "Remote and local match") unless differences?
+      Rivet::Log.write(level, 'Remote and local match') unless differences?
       differences.each_pair do |attr, values|
         Rivet::Log.write(level, "#{attr}:")
         Rivet::Log.write(level, "  remote: #{values[:remote]}")
@@ -75,7 +75,7 @@ module Rivet
         @launch_config.save
         create(options) unless group.exists?
 
-        Rivet::Log.debug "Updating autoscaling group with the follow options"
+        Rivet::Log.debug 'Updating autoscaling group with the follow options'
         Rivet::Log.debug options.inspect
 
         # It's easier to just delete all the tags if there are changes and apply

@@ -36,7 +36,7 @@ module Rivet
       def initialize
         @dev = Logger::LogDevice.new(STDOUT)
         super @dev
-        @progname = "Rivet"
+        @progname = 'Rivet'
         @formatter = proc do |sev, datetime, name, msg|
           "[#{name}] [#{datetime}] [#{sev}]: #{msg}\n"
         end

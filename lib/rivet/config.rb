@@ -6,7 +6,7 @@ module Rivet
     attr_accessor :bootstrap
 
     def self.from_file(dsl_file,load_path='.')
-      name = File.basename(dsl_file,".rb")
+      name = File.basename(dsl_file,'.rb')
       data = Proc.new { eval(File.read(dsl_file)) }
       new(name,load_path,&data)
     end
@@ -26,7 +26,7 @@ module Rivet
         :health_check_type => :ec2,
         :load_balancers => [],
         :tags => [],
-        :termination_policies => ["Default"]
+        :termination_policies => ['Default']
       }
       instance_eval(&block) if block
     end

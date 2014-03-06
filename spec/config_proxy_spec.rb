@@ -13,20 +13,20 @@ describe 'Rivet Config Proxy' do
 
   let(:config_proxy) { Rivet::ConfigProxy.new(config) }
 
-  describe "#send" do
-    it "it calls normalize for a method if it's available" do
+  describe '#send' do
+    it 'it calls normalize for a method if it iss available' do
       config_proxy.send(:unit_test).should == 'normalized ham sandwich'
     end
-    it "it passes on a message sent to it if no normalize method exists" do
+    it 'it passes on a message sent to it if no normalize method exists' do
       config_proxy.send(:goat).should == 'bah'
     end
   end
 
-  describe "it calls normalize for a method if it is available" do
-    it "it calls normalize for a method if it's available" do
+  describe 'it calls normalize for a method if it is available' do
+    it 'it calls normalize for a method if it is available' do
       config_proxy.unit_test.should == 'normalized ham sandwich'
     end
-    it "it passes on a message sent to it if no normalize method exists" do
+    it 'it passes on a message sent to it if no normalize method exists' do
       config_proxy.goat.should == 'bah'
     end
   end

@@ -18,17 +18,17 @@ describe 'rivet bootstrap' do
       File.open(TEMPLATE_FILE, 'w') { |f| f.write(SpecHelpers::BOOTSTRAP_TEMPLATE) }
     end
 
-    context "with a tempate file specified" do
-      describe "#user_data" do
-        it "returns a string of the rendered template" do
+    context 'with a tempate file specified' do
+      describe '#user_data' do
+        it 'returns a string of the rendered template' do
           bootstrap.user_data.should include('bar')
         end
       end
     end
 
-    context "without a template specified" do
-      describe "#user_data" do
-        it "returns a blank string" do
+    context 'without a template specified' do
+      describe '#user_data' do
+        it 'returns a blank string' do
           blank_bootstrap.user_data.should be_empty
         end
       end

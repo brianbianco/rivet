@@ -2,7 +2,7 @@ require_relative './spec_setup'
 
 include SpecHelpers
 
-describe "rivet aws autoscale wrapper" do
+describe 'rivet aws autoscale wrapper' do
   let(:normalized_values) do
     {
       :launch_configuration => 'unit_test_lc',
@@ -63,46 +63,46 @@ describe "rivet aws autoscale wrapper" do
     AWS::AutoScaling.stub(:new).and_return(groups_mock)
   end
 
-  describe "#normalize_launch_configuration" do
-    it "returns launch configuration name" do
+  describe '#normalize_launch_configuration' do
+    it 'returns launch configuration name' do
       wrapper.normalize_launch_configuration.should == 'unit_test_lc'
     end
   end
 
-  describe "#normalize_load_balancers" do
-    it "returns a normalized array of load balancers" do
+  describe '#normalize_load_balancers' do
+    it 'returns a normalized array of load balancers' do
       wrapper.normalize_load_balancers.should == %w(balancer1 balancer2)
     end
   end
 
-  describe "#normalize_availability_zones" do
-    it "returns a normalized array of availability zones" do
+  describe '#normalize_availability_zones' do
+    it 'returns a normalized array of availability zones' do
       wrapper.normalize_availability_zones.should == %w(unit-test-1a unit-test-1b)
     end
   end
 
-  describe "#normalize_tags" do
-    it "returns a normalized array of tags" do
+  describe '#normalize_tags' do
+    it 'returns a normalized array of tags' do
       tags = [{:propagate_at_launch => true, :key => 'Name', :value => 'Unit Test'},
               {:propagate_at_launch => false, :key => 'Sandwich', :value => 'Ham'}]
       wrapper.normalize_tags.should == tags
     end
   end
 
-  describe "#normalize_subnets" do
-    it "returns a normalized array of subnets" do
+  describe '#normalize_subnets' do
+    it 'returns a normalized array of subnets' do
       wrapper.normalize_subnets.should == %w(subnet-0000000a subnet-0000000b)
     end
   end
 
-  describe "#normalize_termination_policies" do
-    it "returns a normalized array of termination policies" do
+  describe '#normalize_termination_policies' do
+    it 'returns a normalized array of termination policies' do
       wrapper.normalize_termination_policies.should == %w(policy1 policy2)
     end
   end
 
-  describe "#normalize_tag" do
-    it "returns a normalized tag" do
+  describe '#normalize_tag' do
+    it 'returns a normalized tag' do
       tag = {:resource_id => 'yoda', :resource_type => 'chewie',
              :propagate_at_launch => true, :key => 'place', :value => 'alderaan' }
 
@@ -112,8 +112,8 @@ describe "rivet aws autoscale wrapper" do
     end
   end
 
-  describe "#new" do
-    it "should normalize values if normalize methods exist" do
+  describe '#new' do
+    it 'should normalize values if normalize methods exist' do
       normalized_values.each_pair do |attr,value|
         wrapper.send(attr).should == value
       end
