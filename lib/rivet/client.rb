@@ -18,6 +18,7 @@ module Rivet
         options.config_path)
 
       unless config
+        Rivet::Utils.list_groups(options.config_path)
         Rivet::Utils.die "The #{options.group} autoscale definition doesn't exist"
       end
 

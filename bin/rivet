@@ -41,13 +41,6 @@ OptionParser.new do |o|
 
   begin
     o.parse!
-    required = %w(group)
-    missing  = required.select { |param| options.send(param).nil? }
-    unless missing.empty?
-      Rivet::Log.fatal "Missing required options: #{missing.join(',')}"
-      Rivet::Log.fatal o
-      exit 255
-    end
   rescue OptionParser::InvalidOption, OptionParser::MissingArgument
     Rivet::Log.fatal $!.to_s
     Rivet::Log.fatal o
