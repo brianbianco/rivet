@@ -60,7 +60,7 @@ module Rivet
     end
 
     def normalize_subnets
-      @group.subnets.map(&:id).sort
+      @group.subnets.empty? ? nil : @group.subnets.map(&:id).sort
     end
 
     def normalize_termination_policies
