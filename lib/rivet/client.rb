@@ -13,7 +13,7 @@ module Rivet
       end
 
       # Get config object for autoscaling group
-      config = Rivet::Utils.get_config(
+      config = Rivet::Utils.get_autoscale_config(
         options.group,
         options.config_path)
 

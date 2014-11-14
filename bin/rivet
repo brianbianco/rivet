@@ -16,14 +16,9 @@ options.profile     = 'default'
 options.config_path = File.join('.', 'autoscale')
 
 OptionParser.new do |o|
-  o.on('-g', '--group [GROUP_NAME]', String, 'Autoscaling group name') do |g|
-    options.group = g
-  end
-
   o.on('-l', '--log-level [LEVEL]', String, 'specify the log level (default is INFO)') do |l|
     options.log_level = Kernel.const_get l.upcase
   end
-
 
   o.on('-p', '--profile [PROFILE_NAME]', 'Selects the AWS profile to use (default is "default")') do |p|
     options.profile = p
@@ -35,6 +30,10 @@ OptionParser.new do |o|
 
   o.on('-c', '--config-path [PATH]', 'The configuration path to use (default is ./autoscale)') do |c|
     options.config_path = c
+  end
+
+  o.on('-g', '--group [GROUP_NAME]', String, 'Autoscaling group name') do |g|
+    options.group = g
   end
 
   o.on('-h') { Rivet::Log.info o; exit }

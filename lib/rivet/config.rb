@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 module Rivet
-  class Config < OpenState
+  class AutoscaleConfig < OpenState
     attr_reader :name
     attr_accessor :bootstrap
 

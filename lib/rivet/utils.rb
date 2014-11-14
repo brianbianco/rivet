@@ -15,9 +15,9 @@ module Rivet
       config_file_names.each { |n| Rivet::Log.info n }
     end
 
-    def self.get_config(name, directory)
+    def self.get_autoscale_config(name, directory)
       dsl_file = File.join(directory, "#{name}.rb")
-      Rivet::Config.from_file(dsl_file, directory) if File.exists?(dsl_file)
+      Rivet::AutoscaleConfig.from_file(dsl_file, directory) if File.exists?(dsl_file)
     end
   end
 end

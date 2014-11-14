@@ -5,13 +5,13 @@ include SpecHelpers
 
 
 describe 'rivet config' do
-  let(:default_config) { Rivet::Config.new('default_unit_test_config') }
-  let(:config) { Rivet::Config.new('unit_test_config') { eval(DSL_CONFIG_CONTENT) } }
+  let(:default_config) { Rivet::AutoscaleConfig.new('default_unit_test_config') }
+  let(:config) { Rivet::AutoscaleConfig.new('unit_test_config') { eval(DSL_CONFIG_CONTENT) } }
 
   context 'without DSL content' do
     describe '#new' do
-      it 'returns a Rivet::Config object' do
-        default_config.should be_an_instance_of Rivet::Config
+      it 'returns a Rivet::AutoscaleConfig object' do
+        default_config.should be_an_instance_of Rivet::AutoscaleConfig
       end
     end
 
@@ -106,8 +106,8 @@ describe 'rivet config' do
   context 'with DSL content' do
 
     describe '#new' do
-      it 'returns a Rivet::Config object' do
-        config.should be_an_instance_of Rivet::Config
+      it 'returns a Rivet::AutoscaleConfig object' do
+        config.should be_an_instance_of Rivet::AutoscaleConfig
       end
     end
 
@@ -120,7 +120,7 @@ describe 'rivet config' do
     describe 'generated attributes' do
       it 'should contain all the attributes defined in the DSL CONTENT' do
         DSL_VALUES.each_pair do |k, v|
-          # bootstrap is an attribute of the Config class, not a generated one
+          # bootstrap is an attribute of the AutoscaleConfig class, not a generated one
           unless k == :bootstrap
             config.generated_attributes.should include(k)
           end
@@ -141,15 +141,15 @@ describe 'rivet config' do
   end
 
   tempdir_context 'with DSL content inside of a file on disk' do
-    let(:config_from_file) { Rivet::Config.from_file(File.join('.', 'unit_test.rb')) }
+    let(:config_from_file) { Rivet::AutoscaleConfig.from_file(File.join('.', 'unit_test.rb')) }
 
     before do
       File.open('unit_test.rb', 'w') { |f| f.write(DSL_CONFIG_CONTENT) }
     end
 
     describe '::from_file' do
-      it 'returns an instance of Rivet::Config' do
-        config_from_file.should be_an_instance_of Rivet::Config
+      it 'returns an instance of Rivet::AutoscaleConfig' do
+        config_from_file.should be_an_instance_of Rivet::AutoscaleConfig
       end
 
       it 'should have all values properly set according to the DSL CONTENT' do
