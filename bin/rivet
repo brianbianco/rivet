@@ -47,5 +47,5 @@ OptionParser.new do |o|
   end
 end
 
-Rivet::Client.new.run(options)
+Rivet::AutoscaleClient.new.run(options)
 

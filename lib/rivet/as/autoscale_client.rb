@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 module Rivet
-  class Client
+  class AutoscaleClient
     def run(options)
       AwsUtils.set_aws_credentials options.profile
       Rivet::Log.level options.log_level
