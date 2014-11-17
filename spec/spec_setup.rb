@@ -54,17 +54,17 @@ module SpecHelpers
   end
 
   AUTOSCALE_IDENTITY_STRING = "bootstrap#{Base64.encode64('unit_test_user_data')}"\
+                              "detailed_instance_monitoring#{Base64.encode64(eval(DSL_VALUES[:detailed_instance_monitoring]).to_s)}"\
+                              "spot_price#{Base64.encode64(eval(DSL_VALUES[:spot_price]))}" \
                               "iam_instance_profile#{Base64.encode64(eval(DSL_VALUES[:iam_instance_profile]))}"\
+                              "block_device_mappings#{Base64.encode64(eval(DSL_VALUES[:block_device_mappings]).join("\t"))}"\
                               "image_id#{Base64.encode64(eval(DSL_VALUES[:image_id]))}"\
-                              "instance_type#{Base64.encode64(eval(DSL_VALUES[:instance_type]))}"\
                               "key_name#{Base64.encode64(eval(DSL_VALUES[:key_name]))}"\
                               "security_groups#{Base64.encode64(eval(DSL_VALUES[:security_groups]).join("\t"))}"\
-                              "associate_public_ip_address#{Base64.encode64(eval(DSL_VALUES[:associate_public_ip_address]).to_s)}"\
-                              "detailed_instance_monitoring#{Base64.encode64(eval(DSL_VALUES[:detailed_instance_monitoring]).to_s)}"\
-                              "block_device_mappings#{Base64.encode64(eval(DSL_VALUES[:block_device_mappings]).join("\t"))}"\
+                              "instance_type#{Base64.encode64(eval(DSL_VALUES[:instance_type]))}"\
                               "kernel_id#{Base64.encode64(eval(DSL_VALUES[:kernel_id]))}"\
                               "ramdisk_id#{Base64.encode64(eval(DSL_VALUES[:ramdisk_id]))}"\
-                              "spot_price#{Base64.encode64(eval(DSL_VALUES[:spot_price]))}"
+                              "associate_public_ip_address#{Base64.encode64(eval(DSL_VALUES[:associate_public_ip_address]).to_s)}"
 
   def tempdir_context(name, &block)
     context name do

@@ -5,18 +5,11 @@ module Rivet
 
     ATTRIBUTES = [
       :bootstrap,
-      :iam_instance_profile,
-      :image_id,
-      :instance_type,
-      :key_name,
-      :security_groups,
-      :associate_public_ip_address,
       :detailed_instance_monitoring,
-      :block_device_mappings,
-      :kernel_id,
-      :ramdisk_id,
       :spot_price
-    ].each { |a| attr_reader a }
+    ] + BASE_AWS_ATTRIBUTES
+
+    ATTRIBUTES.each { |a| attr_reader a }
 
     attr_reader :id_prefix, :config
 

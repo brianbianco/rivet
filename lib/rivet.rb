@@ -10,6 +10,7 @@ require 'optparse'
 require 'ostruct'
 require 'singleton'
 
+require_relative 'rivet/common/base_aws_attributes'
 require_relative 'rivet/as/autoscale'
 require_relative 'rivet/as/aws_autoscale_wrapper'
 require_relative 'rivet/common/aws_utils'
