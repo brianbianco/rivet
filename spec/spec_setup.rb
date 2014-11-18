@@ -83,11 +83,6 @@ module SpecHelpers
     end
   end
 
-  def dsl_from_hash(hash)
-
-
-  end
-
   def generate_config_mock(mock, attrs)
     attrs.each_pair do |a, v|
       if v.respond_to? :each_pair
