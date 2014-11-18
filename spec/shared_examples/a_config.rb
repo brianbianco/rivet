@@ -74,7 +74,7 @@ shared_examples_for "a config" do
 
   tempdir_context 'with DSL content inside of a file on disk' do
     before do
-      File.open('unit_test.rb', 'w') { |f| f.write(DSL_CONFIG_CONTENT) }
+      File.open('unit_test.rb', 'w') { |f| f.write(config_content) }
     end
 
     describe '::from_file' do

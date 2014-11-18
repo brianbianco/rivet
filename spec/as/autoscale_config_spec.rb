@@ -8,6 +8,7 @@ describe 'rivet autoscale config' do
   let(:default_config) { Rivet::AutoscaleConfig.new('default_unit_test_config') }
   let(:config) { Rivet::AutoscaleConfig.new('unit_test_config') { eval(DSL_CONFIG_CONTENT) } }
   let(:config_from_file) { Rivet::AutoscaleConfig.from_file(File.join('.', 'unit_test.rb')) }
+  let(:config_content) { DSL_CONFIG_CONTENT }
 
   it_behaves_like "a config"
 

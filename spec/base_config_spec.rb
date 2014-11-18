@@ -8,6 +8,7 @@ describe 'rivet base config' do
   let(:default_config) { Rivet::BaseConfig.new('default_unit_test_config') }
   let(:config) { Rivet::BaseConfig.new('unit_test_config') { eval(DSL_CONFIG_CONTENT) } }
   let(:config_from_file) { Rivet::BaseConfig.from_file(File.join('.', 'unit_test.rb')) }
+  let(:config_content) { DSL_CONFIG_CONTENT }
 
   it_behaves_like "a config"
 
