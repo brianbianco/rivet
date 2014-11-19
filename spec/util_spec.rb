@@ -19,13 +19,13 @@ describe 'rivet utils' do
 
     context 'with a configuration file' do
       before do
-        File.open(CONFIG_FILE, 'w') { |f| f.write(DSL_CONFIG_CONTENT) }
+        File.open(CONFIG_FILE, 'w') { |f| f.write(ASG_CONFIG_CONTENT) }
       end
 
       describe '#get_config' do
         it 'should return a valid configuration' do
           config = Rivet::Utils.get_autoscale_config('unit_test', AUTOSCALE_DIR)
-          valid_config?(config, COMMON_DSL_VALUES)
+          valid_config?(config, ASG_DSL_VALUES)
         end
       end
     end

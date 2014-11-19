@@ -9,6 +9,20 @@ require_relative '../lib/rivet'
 Rivet::Log.level(Logger::FATAL)
 
 module SpecHelpers
+
+  def self.generate_config_content(values)
+    values.inject(String.new) do |a, (k, v)|
+      if k == :bootstrap
+        v.each_pair do |bootstrap_attr, bootstrap_value|
+          a << "bootstrap.#{bootstrap_attr} #{bootstrap_value}\n"
+        end
+      else
+        a << "#{k} #{v}\n"
+      end
+      a
+    end
+  end
+
   AUTOSCALE_DIR      = File.join('.', 'autoscale')
   CONFIG_FILE        = File.join(AUTOSCALE_DIR, 'unit_test.rb')
   TEMPLATE_FILE      = File.join(AUTOSCALE_DIR, 'default.erb')
@@ -26,7 +40,6 @@ module SpecHelpers
     :ramdisk_id                           => "'ari-12345678'",
     :associate_public_ip_address          => 'false'
   }
-
 
   EC2_DSL_VALUES = {
     :count                                => '1',
@@ -63,16 +76,8 @@ module SpecHelpers
     }
   }.merge(COMMON_DSL_VALUES)
 
-  DSL_CONFIG_CONTENT = ASG_DSL_VALUES.inject(String.new) do |a, (k, v)|
-    if k == :bootstrap
-      v.each_pair do |bootstrap_attr, bootstrap_value|
-        a << "bootstrap.#{bootstrap_attr} #{bootstrap_value}\n"
-      end
-    else
-      a << "#{k} #{v}\n"
-    end
-    a
-  end
+  ASG_CONFIG_CONTENT = generate_config_content ASG_DSL_VALUES
+  EC2_CONFIG_CONTENT = generate_config_content EC2_DSL_VALUES
 
   AUTOSCALE_IDENTITY_STRING = "bootstrap#{Base64.encode64('unit_test_user_data')}"\
                               "detailed_instance_monitoring#{Base64.encode64(eval(ASG_DSL_VALUES[:detailed_instance_monitoring]).to_s)}"\

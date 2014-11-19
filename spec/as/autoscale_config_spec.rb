@@ -7,9 +7,9 @@ include SpecHelpers
 describe 'rivet autoscale config' do
   let(:dsl_values) { ASG_DSL_VALUES }
   let(:default_config) { Rivet::AutoscaleConfig.new('default_unit_test_config') }
-  let(:config) { Rivet::AutoscaleConfig.new('unit_test_config') { eval(DSL_CONFIG_CONTENT) } }
+  let(:config) { Rivet::AutoscaleConfig.new('unit_test_config') { eval(ASG_CONFIG_CONTENT) } }
   let(:config_from_file) { Rivet::AutoscaleConfig.from_file(File.join('.', 'unit_test.rb')) }
-  let(:config_content) { DSL_CONFIG_CONTENT }
+  let(:config_content) { ASG_CONFIG_CONTENT }
 
   it_behaves_like "a config"
 
@@ -81,7 +81,7 @@ describe 'rivet autoscale config' do
     let(:config_from_file) { Rivet::AutoscaleConfig.from_file(File.join('.', 'unit_test.rb')) }
 
     before do
-      File.open('unit_test.rb', 'w') { |f| f.write(DSL_CONFIG_CONTENT) }
+      File.open('unit_test.rb', 'w') { |f| f.write(ASG_CONFIG_CONTENT) }
     end
 
     describe '::from_file' do
