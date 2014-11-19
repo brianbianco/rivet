@@ -64,7 +64,11 @@ module Rivet
     def build_identity_string
       identity = ATTRIBUTES.inject('') do |accum, attribute|
         if attribute != :bootstrap
-          attr_value = self.send(attribute) ? self.send(attribute) : "\0"
+          attr_value = if self.send(attribute).nil?
+            "\0"
+          else
+            self.send(attribute)
+          end
           attr_value = attr_value.join("\t")  if attr_value.respond_to? :join
           attr_value = attr_value.to_s        if !!attr_value == attr_value
           accum << attribute.to_s
