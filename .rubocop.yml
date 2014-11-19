@@ -1,8 +1,3 @@
-Warning: Deprecated pattern style '/Users/bbianco/code/rivet/example/**' in /Users/bbianco/code/rivet/.rubocop.yml. Change to '/Users/bbianco/code/rivet/example/**/*'.
-Warning: Deprecated pattern style '/Users/bbianco/code/rivet/example/**' in /Users/bbianco/code/rivet/.rubocop.yml. Change to '/Users/bbianco/code/rivet/example/**/*'.
-
-
-
 AllCops:
   Exclude:
     - autoscale/**/*
