@@ -19,14 +19,6 @@ module Rivet
       super(name,load_path, &block)
     end
 
-    def path(*args)
-      if args.size < 1
-        @path
-      else
-        File.join(@path, *args)
-      end
-    end
-
     def normalize_availability_zones
       availability_zones.map { |zone| region + zone }.sort
     end
@@ -60,12 +52,6 @@ module Rivet
         normalized_tags << normalized_hash
       end
       normalized_tags
-    end
-
-    protected
-
-    def import(import_path)
-      lambda { eval(File.read(import_path)) }.call
     end
   end
 end
