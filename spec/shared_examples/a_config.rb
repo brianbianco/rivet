@@ -51,7 +51,7 @@ shared_examples_for "a config" do
 
     describe 'generated attributes' do
       it 'should contain all the attributes defined in the DSL CONTENT' do
-        DSL_VALUES.each_pair do |k, v|
+        dsl_values.each_pair do |k, v|
           # bootstrap is an attribute of the BaseConfig class, not a generated one
           unless k == :bootstrap
             config.generated_attributes.should include(k)
@@ -60,13 +60,15 @@ shared_examples_for "a config" do
       end
 
       it 'should have all values properly set according to the DSL CONTENT' do
-        DSL_VALUES.each_pair do |k, v|
+        dsl_values.each_pair do |k, v|
           unless k == :bootstrap
             config.send(k).should == eval(v)
           end
         end
-        DSL_VALUES[:bootstrap].each_pair do |k, v|
-          config.bootstrap.send(k).should == eval(v)
+        if dsl_values.key? :bootstrap
+          dsl_values[:bootstrap].each_pair do |k, v|
+            config.bootstrap.send(k).should == eval(v)
+          end
         end
       end
     end
@@ -79,13 +81,15 @@ shared_examples_for "a config" do
 
     describe '::from_file' do
       it 'should have all values properly set according to the DSL CONTENT' do
-        DSL_VALUES.each_pair do |k, v|
+        dsl_values.each_pair do |k, v|
           unless k == :bootstrap
             config_from_file.send(k).should == eval(v)
           end
         end
-        DSL_VALUES[:bootstrap].each_pair do |k, v|
-          config_from_file.bootstrap.send(k).should == eval(v)
+        if dsl_values.key? :bootstrap
+          dsl_values[:bootstrap].each_pair do |k, v|
+            config_from_file.bootstrap.send(k).should == eval(v)
+          end
         end
       end
     end

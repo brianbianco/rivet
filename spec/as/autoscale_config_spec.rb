@@ -5,6 +5,7 @@ require_relative '../shared_examples/a_config'
 include SpecHelpers
 
 describe 'rivet autoscale config' do
+  let(:dsl_values) { ASG_DSL_VALUES }
   let(:default_config) { Rivet::AutoscaleConfig.new('default_unit_test_config') }
   let(:config) { Rivet::AutoscaleConfig.new('unit_test_config') { eval(DSL_CONFIG_CONTENT) } }
   let(:config_from_file) { Rivet::AutoscaleConfig.from_file(File.join('.', 'unit_test.rb')) }
