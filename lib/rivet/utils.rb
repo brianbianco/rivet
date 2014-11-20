@@ -4,7 +4,7 @@ module Rivet
   module Utils
     def self.die(level = 'fatal', message)
       Rivet::Log.write(level, message)
-      exit
+      exit 1
     end
 
     def self.list_groups(directory)
@@ -15,9 +15,10 @@ module Rivet
       config_file_names.each { |n| Rivet::Log.info n }
     end
 
-    def self.get_autoscale_config(name, directory)
+    def self.get_config(client_type, name, directory)
       dsl_file = File.join(directory, "#{name}.rb")
-      Rivet::AutoscaleConfig.from_file(dsl_file, directory) if File.exists?(dsl_file)
+      klass = Rivet.const_get("#{client_type.capitalize}Config")
+      klass.from_file(dsl_file, directory) if File.exists?(dsl_file)
     end
   end
 end

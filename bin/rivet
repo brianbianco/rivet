@@ -9,11 +9,17 @@ WARN  = Logger::WARN
 FATAL = Logger::FATAL
 INFO  = Logger::INFO
 
+client_type = ARGV[0]
+
+unless ["ec2","autoscale"].include? client_type
+  Rivet::Utils.die "You must select either 'ec2' or 'autoscale' your first argument"
+end
+
 # Default option values
 options             = OpenStruct.new
 options.log_level   = INFO
 options.profile     = 'default'
-options.config_path = File.join('.', 'autoscale')
+options.config_path = File.join('.', client_type)
 
 OptionParser.new do |o|
   o.on('-l', '--log-level [LEVEL]', String, 'specify the log level (default is INFO)') do |l|
@@ -28,12 +34,12 @@ OptionParser.new do |o|
     options.sync = s
   end
 
-  o.on('-c', '--config-path [PATH]', 'The configuration path to use (default is ./autoscale)') do |c|
+  o.on('-c', '--config-path [PATH]', 'The configuration path to use (default is ./autoscale or ./ec2)') do |c|
     options.config_path = c
   end
 
-  o.on('-g', '--group [GROUP_NAME]', String, 'Autoscaling group name') do |g|
-    options.group = g
+  o.on('-n', '--name [NAME]', String, 'Server or Autoscaling group name') do |n|
+    options.name = n
   end
 
   o.on('-h') { Rivet::Log.info o; exit }
@@ -47,5 +53,5 @@ OptionParser.new do |o|
   end
 end
 
-Rivet::AutoscaleClient.new.run(options)
+Rivet::Client.new.run(client_type,options)
 
