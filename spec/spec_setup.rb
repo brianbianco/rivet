@@ -24,7 +24,10 @@ module SpecHelpers
   end
 
   AUTOSCALE_DIR      = File.join('.', 'autoscale')
-  CONFIG_FILE        = File.join(AUTOSCALE_DIR, 'unit_test.rb')
+  ASG_CONFIG_FILE    = File.join(AUTOSCALE_DIR, 'unit_test.rb')
+  EC2_DIR            = File.join('.', 'ec2')
+  EC2_CONFIG_FILE    = File.join(EC2_DIR, 'unit_test.rb')
+
   TEMPLATE_FILE      = File.join(AUTOSCALE_DIR, 'default.erb')
   BOOTSTRAP_TEMPLATE = '<%= "bar" %>'\
 
