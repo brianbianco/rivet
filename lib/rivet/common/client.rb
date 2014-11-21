@@ -26,10 +26,10 @@ module Rivet
 
       config = ConfigProxy.new(config)
 
-      Rivet::Log.info "Checking #{options.name} #{client_type} definition"
+      Rivet::Log.info "#{options.name} #{client_type} definition"
 
       asset = Rivet.const_get(client_type.capitalize).new(config)
-      asset.show_differences
+      asset.display
 
       if options.sync
         asset.sync

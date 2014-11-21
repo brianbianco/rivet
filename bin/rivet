@@ -11,7 +11,7 @@ INFO  = Logger::INFO
 
 client_type = ARGV[0]
 
-unless ["ec2","autoscale"].include? client_type
+unless ["ec2","autoscale","-h"].include? client_type
   Rivet::Utils.die "You must select either 'ec2' or 'autoscale' your first argument"
 end
 
@@ -42,7 +42,7 @@ OptionParser.new do |o|
     options.name = n
   end
 
-  o.on('-h') { Rivet::Log.info o; exit }
+  o.on('-h') { Rivet::Log.info o; exit 0 }
 
   begin
     o.parse!

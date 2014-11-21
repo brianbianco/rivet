@@ -56,7 +56,7 @@ module Rivet
       !differences.empty?
     end
 
-    def show_differences(level = 'info')
+    def display(level = 'info')
       Rivet::Log.write(level, 'Remote and local match') unless differences?
       differences.each_pair do |attr, values|
         Rivet::Log.write(level, "#{attr}:")
