@@ -2,7 +2,6 @@
 
 module Rivet
   class Ec2
-
     OPTIONS = [
       :associate_public_ip_address,
       :availability_zone,
@@ -36,7 +35,9 @@ module Rivet
     attr_reader :name
 
     def initialize(config)
+      @ec2 = AWS::EC2.new
       @name = config.name
+      @user_data = Bootstrap.new(config).user_data
 
       OPTIONS.each do |o|
         if config.respond_to?(o)
@@ -51,16 +52,8 @@ module Rivet
       end
     end
 
-    def sync
-      create(options)
-    end
-
     def options
-      @options ||= get_options
-    end
-
-    def get_options
-       options = {}
+      options = {}
 
       OPTIONS.each do |field|
         local_value = self.send(field)
@@ -75,25 +68,31 @@ module Rivet
       options
     end
 
-    protected
-
-    def create(options)
-      ec2 = AWS::EC2.new
-
+    def sync
       # The AWS ruby SDK forces you to apply tags AFTER creation
       # This option must be removed so the create call doesn't blow up.
       tags_to_add = options.delete :tags
+      i           = @ec2.instances.create options
 
-      i = ec2.instances.create options
+      # Since create returns either an instance object or an array let us
+      # just go ahead and make that more sane
+      i = [i] unless i.respond_to? :each
 
-      if tags_to_add
-        tags_to_add.each do |t|
-          ec2.tags.create(i, t[:key].to_s, :value => t[:value])
+      i.each do |instance|
+        if options.has_key? :tags
+          add_tags(instance,tags_to_add)
+        else
+          Rivet::Log.debug "No tags in config, defaulting to Name: #{@name}"
+          add_tags(instance,[{ :key => 'Name', :value => @name }])
         end
-      else
-        ec2.tags.create(i,'Name',@name)
       end
+
     end
 
+    def add_tags(instance,tags_to_add)
+      tags_to_add.each do |t|
+        @ec2.tags.create(instance, t[:key].to_s, :value => t[:value])
+      end
+    end
   end
 end
