@@ -14,12 +14,6 @@ describe 'rivet autoscale config' do
   it_behaves_like "a config"
 
   context 'without DSL content' do
-    describe '#new' do
-      it 'returns a Rivet::AutoscaleConfig object' do
-        default_config.should be_an_instance_of Rivet::AutoscaleConfig
-      end
-    end
-
     describe '#normalize_availability_zones' do
       before do
         default_config.region 'us-west-2'
@@ -65,28 +59,6 @@ describe 'rivet autoscale config' do
           { propagate_at_launch: false, key: 'Other', value: 'sasquatch' }
         ]
         default_config.normalize_tags.should == expected_result
-      end
-    end
-  end
-
-  context 'with DSL content' do
-    describe '#new' do
-      it 'returns a Rivet::AutoscaleConfig object' do
-        config.should be_an_instance_of Rivet::AutoscaleConfig
-      end
-    end
-  end
-
-  tempdir_context 'with DSL content inside of a file on disk' do
-    let(:config_from_file) { Rivet::AutoscaleConfig.from_file(File.join('.', 'unit_test.rb')) }
-
-    before do
-      File.open('unit_test.rb', 'w') { |f| f.write(ASG_CONFIG_CONTENT) }
-    end
-
-    describe '::from_file' do
-      it 'returns an instance of Rivet::AutoscaleConfig' do
-        config_from_file.should be_an_instance_of Rivet::AutoscaleConfig
       end
     end
   end

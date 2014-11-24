@@ -12,7 +12,18 @@ describe 'rivet ec2 config' do
   let(:config_content) { EC2_CONFIG_CONTENT }
 
   it_behaves_like "a config"
+
+  context 'without DSL content' do
+    describe '#normalize_availability_zone' do
+      before do
+        default_config.region 'us-west-2'
+        default_config.availability_zone 'a'
+      end
+
+      it 'should return a valid availability zone string' do
+        default_config.normalize_availability_zone.should == 'us-west-2a'
+      end
+    end
+  end
 end
-
-
 
