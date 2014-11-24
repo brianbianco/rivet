@@ -12,8 +12,8 @@ describe 'rivet awsutils' do
           'option2' => 'unit_test_option2'
         },
         'unit_test_profile2' => {
-          'option1' => 'unit_test_option1',
-          'option2' => 'unit_test_option2'
+          'option1    ' => 'unit_test_option1',
+          'option2' => 'unit_test_option2     '
         }
       }
     end
@@ -27,15 +27,18 @@ describe 'rivet awsutils' do
       p
     end
 
-    it 'should return a hash which contains the profile information' do
+    it 'should contain the profile as top level keys' do
+      result = Rivet::AwsUtils.parse_profile_text(profile_text)
+      profile_hash.each_pair { |profile,_| result.should have_key profile }
+    end
+
+    it 'should set all options properly inside the profile hash' do
       result = Rivet::AwsUtils.parse_profile_text(profile_text)
       profile_hash.each_pair do |profile,options|
-        result.should have_key profile
         options.each_pair do |name, value|
-          result[profile][name.to_sym].should == value
+          result[profile][name.strip.to_sym].should == value.strip
         end
       end
     end
-
   end
 end
