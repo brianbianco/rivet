@@ -91,7 +91,8 @@ user-data.
 Rivet will only use the following attributes.
 
 
-```Autoscale
+Autoscale Options
+```
 min_size INTEGER <required>
 max_size INTEGER <required>
 desired_capacity INTEGER <optional, default 0)
@@ -107,7 +108,8 @@ tags ARRAY <optional, default nil)
 block_device_mapping ARRAY <optional, default nil>
 ```
 
-```EC2
+EC2 Options
+```
 count INTEGER <required>
 image_id STRING <required>
 iam_instance_profile STRING <optional>
