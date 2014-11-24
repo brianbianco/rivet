@@ -1,6 +1,10 @@
 Rivet CHANGELOG
 ===
 
+3.0.0 -
+---
+  * Adds functionality to launch regular EC2 instances
+
 2.0.0 -
 ---
   * Completely rewrite of the configuration system to use a DSL instead of YAML
