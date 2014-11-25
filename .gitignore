@@ -23,6 +23,7 @@ _yardoc
 doc/
 
 autoscale/
+ec2/
 
 bin/*
 !bin/rivet
