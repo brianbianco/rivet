@@ -51,7 +51,7 @@ module Rivet
         end
         normalized_tags << normalized_hash
       end
-      normalized_tags
+      normalized_tags.sort_by { |h| h[:key] }
     end
   end
 end

@@ -4,6 +4,9 @@ Rivet CHANGELOG
 3.0.0 -
 ---
   * Adds functionality to launch regular EC2 instances
+  * A diff is now displayed for launch configurations
+  * Bug Fix: The tags array is now sorted alphabetically by key (as this is how the SDK
+    seems to return it now)
 
 2.0.0 -
 ---
