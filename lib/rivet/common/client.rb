@@ -9,7 +9,7 @@ module Rivet
       Rivet::Log.info "Using #{client_type} config path #{options.config_path}"
 
       unless Dir.exists?(options.config_path)
-        Rivet::Utils.die 'The #{client_type} config path does not exist'
+        Rivet::Utils.die "The #{client_type} config path does not exist"
       end
 
       config = Rivet::Utils.get_config(
