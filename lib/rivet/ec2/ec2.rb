@@ -71,18 +71,19 @@ module Rivet
     def sync
       # The AWS ruby SDK forces you to apply tags AFTER creation
       # This option must be removed so the create call doesn't blow up.
-      tags_to_add = options.delete :tags
-      i           = @ec2.instances.create options
+      server_options = options
+      tags_to_add    = server_options.delete :tags
+      i              = @ec2.instances.create server_options
 
       # Since create returns either an instance object or an array let us
       # just go ahead and make that more sane
       i = [i] unless i.respond_to? :each
 
       i.each do |instance|
-        if options.has_key? :tags
+        if tags_to_add
           add_tags(instance,tags_to_add)
         else
-          Rivet::Log.debug "No tags in config, defaulting to Name: #{@name}"
+          Rivet::Log.info "No tags in config, defaulting to Name: #{@name}"
           add_tags(instance,[{ :key => 'Name', :value => @name }])
         end
       end
