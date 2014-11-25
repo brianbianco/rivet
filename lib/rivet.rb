@@ -9,6 +9,7 @@ require 'logger'
 require 'optparse'
 require 'ostruct'
 require 'singleton'
+require 'diff/lcs'
 
 require_relative 'rivet/common/base_aws_attributes'
 require_relative 'rivet/as/autoscale'

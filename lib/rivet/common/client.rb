@@ -32,6 +32,7 @@ module Rivet
       asset.display
 
       if options.sync
+        Rivet::Log.debug "syncing asset #{options.name}"
         asset.sync
       else
         Rivet::Log.info 'use the -s [--sync] flag to sync changes'

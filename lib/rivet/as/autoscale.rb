@@ -1,5 +1,6 @@
 # encoding: UTF-8
 
+
 module Rivet
   class Autoscale
 
@@ -64,13 +65,25 @@ module Rivet
         Rivet::Log.write(level, "  local:  #{values[:local]}")
       end
      Rivet::Log.write('debug', @launch_config.user_data)
+     display_lc_diff
+    end
+
+    def display_lc_diff
+      @lc_diff ||= get_lc_diff
+
+      Rivet::Log.info"Displaying diff for launch configuration:"
+      @lc_diff.each do |d|
+        d.each do |current|
+          Rivet::Log.info "   #{current.action} #{current.element.join}"
+        end
+      end
     end
 
     def sync
       if differences?
         Rivet::Log.info "Syncing autoscale group changes to AWS for #{@name}"
         autoscale = AWS::AutoScaling.new
-        group = autoscale.groups[@name]
+        group     = autoscale.groups[@name]
 
         @launch_config.save
         create(options) unless group.exists?
@@ -97,13 +110,30 @@ module Rivet
 
       OPTIONS.each do |o|
         remote_value = @remote_group.send(o)
-        local_value = send(o)
+        local_value  = send(o)
 
         if (remote_value != local_value)
           differences[o] = { :local => send(o), :remote => @remote_group.send(o) }
         end
       end
       differences
+    end
+
+    def get_lc_diff
+      autoscale = AWS::AutoScaling.new
+      remote_lc_identity = @remote_group.launch_configuration
+
+      if remote_lc_identity.nil?
+        remote_user_data = ''
+      else
+        remote_lc = autoscale.launch_configurations[remote_lc_identity]
+        remote_user_data = remote_lc.user_data.split("\n")
+      end
+
+      # We split on new lines so the diff doesn't compare by character
+      local_user_data  = @launch_config.user_data.split("\n")
+
+      Diff::LCS.diff(remote_user_data,local_user_data)
     end
 
     def get_update_options
@@ -123,7 +153,6 @@ module Rivet
     end
 
     def create(options)
-
       # When creating an autoscaling group passing empty arrays for subnets
       # or some other fields can cause it to barf.  Remove them first.
       options.delete_if { |k, v| v.respond_to?(:'empty?') && v.empty? }

@@ -9,3 +9,4 @@ group(:development, :test) do
 end
 
 gem 'aws-sdk',  '>= 1.11.1'
+gem 'diff-lcs', '>= 1.2.5'
