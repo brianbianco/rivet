@@ -48,8 +48,8 @@ describe 'rivet autoscale config' do
     describe '#normalize_tags' do
       before do
         default_config.tags [
-          { key: 'Name', value: 'unit test' },
-          { key: 'Other', value: 'sasquatch', propagate_at_launch: false }
+          { key: 'Other', value: 'sasquatch', propagate_at_launch: false },
+          { key: 'Name', value: 'unit test' }
         ]
       end
 
