@@ -1,21 +1,9 @@
 # encoding: UTF-8
 
 module Rivet
-  class Config < OpenState
-    attr_reader :name
-    attr_accessor :bootstrap
-
-    def self.from_file(dsl_file, load_path='.')
-      name = File.basename(dsl_file, '.rb')
-      data = Proc.new { eval(File.read(dsl_file)) }
-      new(name, load_path, &data)
-    end
+  class AutoscaleConfig < BaseConfig
 
     def initialize(name, load_path='.', &block)
-      super()
-      @name = name
-      @path = load_path
-      @bootstrap = OpenState.new
       @required_fields = {
         :min_size => nil,
         :max_size => nil,
@@ -28,23 +16,11 @@ module Rivet
         :tags => [],
         :termination_policies => ['Default']
       }
-      instance_eval(&block) if block
-    end
-
-    def path(*args)
-      if args.size < 1
-        @path
-      else
-        File.join(@path, *args)
-      end
+      super(name,load_path, &block)
     end
 
     def normalize_availability_zones
       availability_zones.map { |zone| region + zone }.sort
-    end
-
-    def normalize_security_groups
-      security_groups.sort
     end
 
     def normalize_load_balancers
@@ -75,13 +51,7 @@ module Rivet
         end
         normalized_tags << normalized_hash
       end
-      normalized_tags
-    end
-
-    protected
-
-    def import(import_path)
-      lambda { eval(File.read(import_path)) }.call
+      normalized_tags.sort_by { |h| h[:key] }
     end
   end
 end

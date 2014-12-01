@@ -2,9 +2,9 @@
 
 Rivet
 =======
-Rivet enables you to describe autoscaling groups and their launch configurations as configuration.  You can then sync those changes to Amazon Web Services (AWS.)
+Rivet enables you to describe autoscaling groups, their launch configurations, and regular EC2 instances  as configuration.  You can then sync those changes to Amazon Web Services (AWS.)
 
-You optionally provide a template and it's options to render as user-data for your launch configurations. 
+You optionally provide a template and it's options to render as user-data for your launch configurations or EC2 instances. 
 
 Rivet generates unique deterministic names for launch configurations and automatically assigns the proper launch configuration to your
 autoscaling group based upon it's generated identity.
@@ -51,16 +51,18 @@ You will still need to specify the region to use in your `AWS_CONFIG_FILE`.
 Rivet will use the [default] profile if you do not specify a profile to use with the -p [--profile] option.
 
 
-Autoscaling group definition directories and files
+Definition directories and files
 --------------------------------------------------
 
 Example files can be found in the example/ directory in the rivet git repository
 
-Rivet will look in the directory specified on the command line (or ./autoscale by default) for configuration files.  It expects the configuration file name to match the name of the autoscaling group. 
+Rivet will look in the directory specified on the command line (./autoscale or ./ec2 by default) for configuration files.  It expects the configuration file name to match the name of the autoscaling group or EC2 instance. 
 
 ```
 ./autoscale
-  `- group_name.rb
+  `- name.rb
+./ec2
+  `- name.rb
 ```
 
 Configuration DSL
@@ -88,6 +90,8 @@ user-data.
 
 Rivet will only use the following attributes.
 
+
+Autoscale Options
 ```
 min_size INTEGER <required>
 max_size INTEGER <required>
@@ -101,7 +105,33 @@ load_balancers ARRAY <optional, default nil)
 subnet ARRAY <optional, default nil)
 iam_instance_profile STRING <optional, default nil)
 tags ARRAY <optional, default nil)
+block_device_mapping ARRAY <optional, default nil>
+```
 
+EC2 Options
+```
+count INTEGER <required>
+image_id STRING <required>
+iam_instance_profile STRING <optional>
+block_device_mapping ARRAY <optional>
+monitoring_enabled BOOLEAN <optional>
+availability_zone STRING <optional>
+placement_group STRING <optional>
+key_name STRING <optional>
+security_groups ARRAY <optional>
+security_group_ids ARRAY <optional>
+instance_type STRING <optional>
+kernel_id STRING <optional>
+ramdisk_id STRING <optional>
+disable_api_termination BOOLEAN <optional>
+instance_initiated_shutdown_behavior STRING <optional>
+subnet STRING <optional>
+private_ip_address STRING <optional>
+dedicated_tenancy BOOLEAN <optional>
+ebs_optimized BOOLEAN <optional>
+associate_public_ip_address BOOLEAN <optional>
+elastic_ips ARRAY <optional>
+network_interfaces ARRAY <optional>
 ```
 
 Availability zones should use the single character of the zone ('a', 'b','c').  The region will be appended by rivet.
@@ -111,6 +141,19 @@ Tags should be an Array of Hashes with the format:
    value: String,
    propogate_at_launch: True/False <optional, default True>'}
 
+Block device mappings should be an array of Hashes with the format:
+{
+  virtual_name: String,
+  device_name: String,
+  ebs: {
+    snapshot_id: String
+    volume_size: Integer
+    delete_on_termination: Boolean
+    volume_type: String
+    iops: Integer
+  }
+  no_device: String
+}
 
 Using the bootstrap functionality
 ---------------------------------
@@ -140,8 +183,10 @@ Usage
 =====
 
 ```
-Usage: rivet [options]
-    -g, --group [GROUP_NAME]         Autoscaling group name
+Usage: rivet sub-command [options]
+    sub-commands: ec2, autoscale
+
+    -n, --name [NAME]                Server or Autoscaling group name
     -l, --log-level [LEVEL]          specify the log level (default is INFO)
     -p, --profile [PROFILE_NAME]     Selects the AWS profile to use (default is 'default')
     -s, --sync                       Sync the changes remotely to AWS
@@ -149,21 +194,27 @@ Usage: rivet [options]
     -h
 ```
 
+launch an ec2 instance
+
+```bash
+rivet ec2 -n example_instance
+```
+
 check the differences for the example_group autoscaling group
 
 ```bash
-rivet -g example_group
+rivet autoscale -n example_group
 ```
 
 check the differences for the example_group using the foobar profile
 
 ```bash
-rivet -g example_group -p foobar
+rivet autoscale -n example_group -p foobar
 ```
 
 sync the differences for the example_group using the foobar profile
 
 ```bash
-rivet -g example_group -p foobar -s
+rivet autoscale -n example_group -p foobar -s
 ```
 

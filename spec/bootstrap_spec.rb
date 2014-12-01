@@ -4,7 +4,7 @@ require_relative './spec_setup'
 include SpecHelpers
 
 describe 'rivet bootstrap' do
-  let(:config) { generate_config_mock(double('config_mock'), DSL_VALUES) }
+  let(:config) { generate_config_mock(double('config_mock'), ASG_DSL_VALUES) }
   let(:bootstrap) { Rivet::Bootstrap.new(config) }
   let(:blank_config) do
     blank_config_mock = double('blank_config_mock')

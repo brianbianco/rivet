@@ -1,5 +1,5 @@
 # encoding: UTF-8
-require_relative './spec_setup'
+require_relative '../spec_setup'
 
 include SpecHelpers
 

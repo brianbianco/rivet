@@ -21,37 +21,38 @@ module Rivet
       end
     end
 
+    def self.parse_profile_text(text)
+      current_profile = nil
+      profile_matcher = /^\[(profile+\s)?(\w+)\]/
+      option_matcher  = /(\w.*)\s*=\s*(\S.*)\s*/
+      aws_config      = {}
+
+      text.each_line do |line|
+        if line =~ profile_matcher
+          current_profile = line.match(profile_matcher)[2]
+          aws_config[current_profile] = {} unless aws_config.has_key?(current_profile)
+        end
+
+        if line =~ option_matcher && !current_profile.nil?
+          results = line.match(option_matcher)
+
+          # Normalize the option name so it can be used with the AWS SDK
+          if results[1] =~ /^\S*aws_/
+            option = results[1].strip.gsub('aws_', '').to_sym
+          else
+            option = results[1].strip.to_sym
+          end
+
+          value = results[2].strip
+          aws_config[current_profile].merge!({ option => value })
+        end
+      end
+      aws_config
+    end
+
     def self.config_parser
       if ENV['AWS_CONFIG_FILE']
-
-        current_profile = nil
-        profile_matcher = /^\[(profile+\s)?(\w+)\]/
-        option_matcher  = /(\w.*)=(\S.*)\s*/
-        aws_config      = {}
-
-        File.open(ENV['AWS_CONFIG_FILE'], 'r').each_line do |line|
-
-          if line =~ profile_matcher
-            current_profile = line.match(profile_matcher)[2]
-            aws_config[current_profile] = {} unless aws_config.has_key?(current_profile)
-          end
-
-          if line =~ option_matcher && !current_profile.nil?
-            results = line.match(option_matcher)
-
-            # Normalize the option name so it can be used with the AWS SDK
-            if results[1] =~ /^\S*aws_/
-              option = results[1].gsub('aws_', '').to_sym
-            else
-              option = results[1].to_sym
-            end
-
-            value = results[2]
-            aws_config[current_profile].merge!({ option => value })
-          end
-
-          end
-        aws_config
+        parse_profile_text(File.read(ENV['AWS_CONFIG_FILE']))
       end
     end
 
@@ -67,11 +68,8 @@ module Rivet
           end
           accum
         end
-
         AWS.config(aws_creds) if aws_creds
-
       end
     end
-
   end
 end

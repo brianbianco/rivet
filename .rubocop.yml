@@ -1,8 +1,8 @@
 AllCops:
-  Excludes:
-    - autoscale/**
-    - example/**
-    - example/autoscale/**
+  Exclude:
+    - autoscale/**/*
+    - example/**/*
+    - example/autoscale/**/*
 
 Eval:
   Enabled: false

@@ -2,37 +2,38 @@
 
 module Rivet
   class Client
-    def run(options)
+    def run(client_type,options)
       AwsUtils.set_aws_credentials options.profile
       Rivet::Log.level options.log_level
 
-      Rivet::Log.info "Using autoscale config path #{options.config_path}"
+      Rivet::Log.info "Using #{client_type} config path #{options.config_path}"
 
       unless Dir.exists?(options.config_path)
-        Rivet::Utils.die 'The autoscale config path does not exist'
+        Rivet::Utils.die "The #{client_type} config path does not exist"
       end
 
-      # Get config object for autoscaling group
       config = Rivet::Utils.get_config(
-        options.group,
+        client_type,
+        options.name,
         options.config_path)
 
       unless config
         Rivet::Utils.list_groups(options.config_path)
-        Rivet::Utils.die "The #{options.group} autoscale definition doesn't exist"
+        Rivet::Utils.die "The #{options.name} #{client_type} definition doesn't exist"
       end
 
       config.validate
 
       config = ConfigProxy.new(config)
 
-      Rivet::Log.info "Checking #{options.group} autoscaling definition"
+      Rivet::Log.info "#{options.name} #{client_type} definition"
 
-      autoscale_group = Rivet::Autoscale.new(config)
-      autoscale_group.show_differences
+      asset = Rivet.const_get(client_type.capitalize).new(config)
+      asset.display
 
       if options.sync
-        autoscale_group.sync
+        Rivet::Log.debug "syncing asset #{options.name}"
+        asset.sync
       else
         Rivet::Log.info 'use the -s [--sync] flag to sync changes'
       end
