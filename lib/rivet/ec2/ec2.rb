@@ -73,27 +73,44 @@ module Rivet
       # This option must be removed so the create call doesn't blow up.
       server_options = options
       tags_to_add    = server_options.delete :tags
-      i              = @ec2.instances.create server_options
+      instances      = @ec2.instances.create server_options
 
       # Since create returns either an instance object or an array let us
       # just go ahead and make that more sane
-      i = [i] unless i.respond_to? :each
+      instances = [instances] unless instances.respond_to? :each
 
-      i.each do |instance|
+      instances.each do |i|
         if tags_to_add
-          add_tags(instance,tags_to_add)
+          add_tags(i,tags_to_add)
         else
           Rivet::Log.info "No tags in config, defaulting to Name: #{@name}"
-          add_tags(instance,[{ :key => 'Name', :value => @name }])
+          add_tags(i,[{ :key => 'Name', :value => @name }])
         end
       end
 
+      wait_until_running instances
     end
 
     def add_tags(instance,tags_to_add)
       tags_to_add.each do |t|
         @ec2.tags.create(instance, t[:key].to_s, :value => t[:value])
       end
+    end
+
+    def wait_until_running(instances)
+      Rivet::Log.info "Waiting for instance to start.  This could take a while..."
+      finished = []
+      until instances.size <= 0
+        instances.reject! do |i|
+          unless i.status == :pending
+            Rivet::Log.info "#{i.id} is in #{i.status} state."
+            finished << i
+            true
+          end
+        end
+        sleep 1
+      end
+      finished
     end
   end
 end
