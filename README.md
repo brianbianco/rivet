@@ -130,6 +130,8 @@ private_ip_address STRING <optional>
 dedicated_tenancy BOOLEAN <optional>
 ebs_optimized BOOLEAN <optional>
 associate_public_ip_address BOOLEAN <optional>
+elastic_ips ARRAY <optional>
+network_interfaces ARRAY <optional>
 ```
 
 Availability zones should use the single character of the zone ('a', 'b','c').  The region will be appended by rivet.
