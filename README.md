@@ -137,11 +137,13 @@ network_interfaces ARRAY <optional>
 Availability zones should use the single character of the zone ('a', 'b','c').  The region will be appended by rivet.
 
 Tags should be an Array of Hashes with the format:
+```
 {  key: String,
    value: String,
    propogate_at_launch: True/False <optional, default True>'}
-
+```
 Block device mappings should be an array of Hashes with the format:
+```
 {
   virtual_name: String,
   device_name: String,
@@ -154,7 +156,7 @@ Block device mappings should be an array of Hashes with the format:
   }
   no_device: String
 }
-
+```
 Using the bootstrap functionality
 ---------------------------------
 

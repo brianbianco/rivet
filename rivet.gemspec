@@ -11,8 +11,8 @@ Gem::Specification.new do |spec|
   spec.authors     = ['Brian Bianco']
   spec.email       = ['brian.bianco@gmail.com']
   spec.homepage    = 'http://www.github.com/brianbianco/rivet'
-  spec.summary     = %q{A tool for managing autoscaling groups}
-  spec.description = %q{Rivet allows you to define autoscaling groups and launch configurations as configuration and SYNC that to AWS}
+  spec.summary     = %q{A tool for managing autoscaling groups and launching ec2 servers}
+  spec.description = %q{A tool for defining EC2 and Autoscaling Groups as configuration}
 
   spec.required_ruby_version     = '>= 1.9.1'
   spec.required_rubygems_version = '>= 1.3.6'
