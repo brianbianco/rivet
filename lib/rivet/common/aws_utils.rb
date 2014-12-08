@@ -3,7 +3,7 @@
 module Rivet
   module AwsUtils
 
-    def self.verify_security_groups(groups)
+    def self.verify_security_groups(groups,vpc=nil)
       return false if groups.nil? || groups.all?{|g| g.match(/\Asg-[0-9a-f]{8}\z/) }
       Rivet::Log.info "Verifying security groups: #{groups.join(",")}"
 

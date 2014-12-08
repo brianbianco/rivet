@@ -74,7 +74,12 @@ module Rivet
       Rivet::Log.info"Displaying diff for launch configuration:"
       @lc_diff.each do |d|
         d.each do |current|
-          Rivet::Log.info "   #{current.action} #{current.element.join}"
+          diff_text = if current.element.respond_to? :join
+            current.element.join
+          else
+            current.element
+          end
+          Rivet::Log.info "   #{current.action} #{diff_text}"
         end
       end
     end

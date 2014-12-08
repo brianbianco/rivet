@@ -1,6 +1,11 @@
 Rivet CHANGELOG
 ===
 
+3.0.1 -
+---
+  * Fixes undefined method join bug in displaying launch configuration diffs
+
+
 3.0.0 -
 ---
   * Adds functionality to launch regular EC2 instances
