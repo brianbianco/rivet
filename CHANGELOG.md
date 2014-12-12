@@ -1,10 +1,13 @@
 Rivet CHANGELOG
 ===
 
+3.0.2 -
+---
+  * Fixes bug where rivet would try to add tags to an ec2 instances before it existed
+
 3.0.1 -
 ---
   * Fixes undefined method join bug in displaying launch configuration diffs
-
 
 3.0.0 -
 ---

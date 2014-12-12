@@ -83,8 +83,8 @@ module Rivet
       # just go ahead and make that more sane
       instances = [instances] unless instances.respond_to? :each
 
-      add_tags(instances,tags_to_add)
       ready_instances = wait_until_running instances
+      add_tags(ready_instances,tags_to_add)
       add_eips(ready_instances,eips_to_add) if eips_to_add
       add_network_interfaces(ready_instances,enis_to_add) if enis_to_add
     end
