@@ -1,5 +1,6 @@
 # encoding: UTF-8
 
+require 'aws-sdk-v1'
 require 'aws-sdk'
 require 'base64'
 require 'digest/sha1'
