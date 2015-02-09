@@ -1,6 +1,10 @@
 Rivet CHANGELOG
 ===
 
+3.0.3 -
+---
+  * Updates aws-sdk dependencies to aws-sdk-v1 as per [Amazon's recommendation](http://ruby.awsblog.com/post/TxFKSK2QJE6RPZ/Upcoming-Stable-Release-of-AWS-SDK-for-Ruby-Version-2)
+
 3.0.2 -
 ---
   * Fixes bug where rivet would try to add tags to an ec2 instances before it existed

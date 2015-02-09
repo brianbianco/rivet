@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.executables  = %w(rivet)
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'aws-sdk', '>= 1.11.1'
+  spec.add_dependency 'aws-sdk-v1', '~> 1'
   spec.add_dependency 'diff-lcs', '>= 1.2.5'
   spec.add_development_dependency 'pry', '~> 0.9.12'
   spec.add_development_dependency 'rake', '>= 10.1.0'
