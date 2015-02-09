@@ -8,5 +8,6 @@ group(:development, :test) do
   gem 'rspec',  '~> 2.14.1'
 end
 
-gem 'aws-sdk',  '>= 1.11.1'
+gem 'aws-sdk-v1', '~> 1'
+gem 'aws-sdk',  '~> 2'
 gem 'diff-lcs', '>= 1.2.5'

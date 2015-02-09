@@ -1,6 +1,10 @@
 Rivet CHANGELOG
 ===
 
+3.0.5 -
+---
+  * Adds the aws-sdk back to the gem dependencies as it is necessary.
+
 3.0.4 -
 ---
   * Fixes bug because of missing require for the new aws-sdk-v1 gem.
