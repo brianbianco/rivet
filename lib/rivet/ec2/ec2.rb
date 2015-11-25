@@ -145,6 +145,8 @@ module Rivet
     end
 
     def wait_until_running(instances)
+      #TODO: Catch AWS::EC2::Errors::InvalidInstanceID::NotFound and only bomb out if it happens many times
+
       Rivet::Log.info "Waiting for instance to start.  This could take a while..."
       finished = []
       until instances.size <= 0

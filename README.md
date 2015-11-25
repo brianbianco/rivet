@@ -21,7 +21,7 @@ Setup
 AWS Credentials
 ---------------
 
-Rivet uses the python AWS CLI tools [https://github.com/aws/aws-cli] configuration format and file for it's AWS credentials.  This means it looks for a file located at AWS\_CONFIG\_FILE.
+Rivet uses the python AWS CLI tools [https://github.com/aws/aws-cli] configuration format and file for it's AWS credentials.  This means it looks for a file located at AWS\_CONFIG\_FILE or ~/.aws/config if that is not set.
 
 Right now Rivet only uses the following options from the file:
 
@@ -33,12 +33,12 @@ Right now Rivet only uses the following options from the file:
 An example config could look as follows:
 
 ```ini
-[profile default]
+[default]
 aws_access_key_id=<YOUR ACCESS KEY ID>
 aws_secret_access_key=<YOUR SECRET ACCESS KEY>
 region=us-east-1
 
-[profile foo]
+[foo]
 aws_access_key_id=<YOUR ACCESS KEY ID>
 aws_secret_access_key=<YOUR SECRET_ACCESS KEY>
 region=us-west-2

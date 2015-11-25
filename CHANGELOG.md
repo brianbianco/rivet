@@ -1,6 +1,10 @@
 Rivet CHANGELOG
 ===
 
+3.1.0 -
+---
+  * Rivet will now use ~/.aws/config if $AWS_CONFIG_FILE isn't set
+
 3.0.5 -
 ---
   * Adds the aws-sdk back to the gem dependencies as it is necessary.

@@ -51,9 +51,14 @@ module Rivet
     end
 
     def self.config_parser
-      if ENV['AWS_CONFIG_FILE']
-        parse_profile_text(File.read(ENV['AWS_CONFIG_FILE']))
-      end
+      parse_profile_text(File.read(aws_config_dir)) if aws_config_dir
+    end
+
+    def self.aws_config_dir
+      default_dir = File.join(Dir.home,".aws","config")
+      config_dir = ENV['AWS_CONFIG_FILE']
+      config_dir = default_dir if (File.exist?(default_dir) && config_dir.nil?)
+      config_dir
     end
 
     def self.set_aws_credentials(profile)
