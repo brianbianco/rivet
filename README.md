@@ -88,8 +88,20 @@ bootstrap
 be made available to the template file provided.  Rendered, and injected as EC2
 user-data.
 
-Rivet will only use the following attributes.
+post (EC2 ONLY)
 
+- provides a mechansim for you to pass a ruby block to be executed after the
+  the instances have been successfully created.  the instances method will be
+  available inside the block and will contain and array of instance id's.
+  ```
+  post do
+    instances.each do |x|
+      puts x
+    end
+  end
+  ```
+
+Rivet will only use the following attributes.
 
 Autoscale Options
 ```
@@ -157,6 +169,9 @@ Block device mappings should be an array of Hashes with the format:
   no_device: String
 }
 ```
+
+
+
 Using the bootstrap functionality
 ---------------------------------
 

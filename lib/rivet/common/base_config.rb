@@ -27,6 +27,11 @@ module Rivet
       end
     end
 
+    def post(&block)
+      return @block if block.nil?
+      @block = block
+    end
+
     def normalize_security_groups
       security_groups.sort
     end

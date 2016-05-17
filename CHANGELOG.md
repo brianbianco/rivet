@@ -1,6 +1,10 @@
 Rivet CHANGELOG
 ===
 
+3.2.0 -
+---
+  * Adds post instance creation hooks
+
 3.1.0 -
 ---
   * Rivet will now use ~/.aws/config if $AWS_CONFIG_FILE isn't set

@@ -35,10 +35,12 @@ module Rivet
     ]
 
     attr_reader :name
+    attr_reader :post
 
     def initialize(config)
       @ec2 = AWS::EC2.new
       @name = config.name
+      @post = config.post
       @user_data = Bootstrap.new(config).user_data
 
       OPTIONS.each do |o|
@@ -87,6 +89,11 @@ module Rivet
       add_tags(ready_instances,tags_to_add)
       add_eips(ready_instances,eips_to_add) if eips_to_add
       add_network_interfaces(ready_instances,enis_to_add) if enis_to_add
+      unless post.nil?
+        post_processing = OpenStruct.new
+        post_processing.instances = ready_instances.collect { |i| i.id }
+        post_processing.instance_eval(&post)
+      end
     end
 
     protected
