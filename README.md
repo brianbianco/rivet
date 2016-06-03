@@ -72,28 +72,28 @@ You can execute any arbitrary ruby you please inside of a rivet configuration.
 
 Rivets built in commands:
 
-path()
+**path()**
 
 - A function that returns the configuration directory path.
 - optionally takes any number of strings as arguments and will return the configuration
   path with those strings joined to it.
 
-import(PATH)
+**import(PATH)**
 
 - A function that allows you to import other rivet configuration files
 
-bootstrap
+**bootstrap**
 
 - provide this with a template file and a set of variables.  The variables will
 be made available to the template file provided.  Rendered, and injected as EC2
 user-data.
 
-post
+**post**
 
   provides a mechansim for you to pass a ruby block to be executed after a sync
   has completed.  Behavior is different for autoscale and ec2
 
-  * EC2 -
+  * EC2
 
   After instances have been successfully created block will be called.
   Instances method will be available inside the block and will contain an
