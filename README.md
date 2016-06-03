@@ -88,16 +88,32 @@ bootstrap
 be made available to the template file provided.  Rendered, and injected as EC2
 user-data.
 
-post (EC2 ONLY)
+post
 
-- provides a mechansim for you to pass a ruby block to be executed after the
-  the instances have been successfully created.  the instances method will be
-  available inside the block and will contain and array of instance id's.
+  provides a mechansim for you to pass a ruby block to be executed after a sync
+  has completed.  Behavior is different for autoscale and ec2
+
+  * EC2 -
+
+  After instances have been successfully created block will be called.
+  Instances method will be available inside the block and will contain an
+  array of instance id's.
+
   ```
   post do
     instances.each do |x|
       puts x
     end
+  end
+  ```
+
+  * Autoscale
+
+  After the autoscaling group is synced the block will fire.  No information is
+  currently passed in.
+  ```
+  post do
+    puts "You gotta get schwifty in here"
   end
   ```
 

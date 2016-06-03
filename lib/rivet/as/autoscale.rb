@@ -28,11 +28,13 @@ module Rivet
     ]
 
     attr_reader :name
+    attr_reader :post
 
     def initialize(config)
       @name          = config.name
       @remote_group  = AwsAutoscaleWrapper.new(@name)
       @launch_config = LaunchConfig.new(config)
+      @post = config.post
 
       OPTIONS.each do |o|
         if config.respond_to?(o)
@@ -105,6 +107,11 @@ module Rivet
 
       else
         Rivet::Log.info "No autoscale differences to sync to AWS for #{@name}."
+      end
+    # Post processing hooks
+      unless post.nil?
+        post_processing = OpenStruct.new
+        post_processing.instance_eval(&post)
       end
     end
 
