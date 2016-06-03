@@ -31,6 +31,25 @@ shared_examples_for "a config" do
       end
     end
 
+    describe '#post' do
+      context 'with no arguments' do
+        it 'returns nil' do
+          default_config.post.should == nil
+        end
+      end
+      context 'with arguments' do
+        it 'returns a callable proc' do
+          msg = "Yehaw"
+          default_config.post do
+            raise msg
+          end
+          expect do
+            default_config.post.call
+          end.to raise_error msg
+        end
+      end
+    end
+
     describe '#normalize_security_groups' do
       before do
         default_config.security_groups %w(group2 group1 group3)
